@@ -37,6 +37,7 @@ export function GagCard(props: GagCardProps) {
           </Tooltip>
         </CardContent>
         <CardMedia
+          className={classes.responsiveImg}
           component="img"
           image={post.content.url}
           title={post.title}
@@ -67,6 +68,10 @@ export function GagCard(props: GagCardProps) {
 }
 
 const useStyles = makeStyles((theme) => ({
+  responsiveImg: {
+    width: "100%",
+    height: "auto",
+  },
   root: {
     marginBottom: 20,
     maxWidth: 500,

@@ -5,7 +5,7 @@ export function postsDummyResponse(responseLen: number = 3) {
     "headline": "{{lorem min=1 max=10}}",
     "id": {{int 1 100}},
     "image": {
-      "url": "img{{@index}}.png",
+      "url": "/assets/img{{@index}}.jpg",
       "meta": {{> metadata}}
     },
     "name": "{{firstName}} {{lastName}}"
@@ -16,7 +16,7 @@ export function postsDummyResponse(responseLen: number = 3) {
     "source": "{{lorem min=1 max=5}}",
     "subType": "{{lorem min=1 max=5}}",
     "type": "{{lorem min=1 max=5}}",
-    "url": "{{lorem min=1 max=5}}"
+    "url": "/assets/img{{@index}}.jpg"
   }`;
 
   const metadata = `{
