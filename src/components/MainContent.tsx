@@ -1,13 +1,12 @@
-import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import React from "react";
+import { Route, Switch } from "react-router-dom";
 
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
 
-import { HomeWithRouter } from './HomePage';
-import { GagWithRouter } from './GagPage';
-import { CreateMemeWithRouter } from './CreateMeme';
-import { NotFoundPage } from './NotFoundPage';
+import { HomeWithRouter } from "./HomePage";
+import { GagWithRouter } from "./GagPage";
+import { NotFoundPage } from "./NotFoundPage";
 
 type MainContentProps = any;
 
@@ -18,9 +17,6 @@ export const MainContent = (props: MainContentProps) => {
       <div className={classes.toolbar} />
       <Container>
         <Switch>
-          <Route exact path="/create/meme">
-            <CreateMemeWithRouter />
-          </Route>
           <Route exact path="/gag/:id">
             <GagWithRouter />
           </Route>
@@ -32,17 +28,17 @@ export const MainContent = (props: MainContentProps) => {
       </Container>
     </main>
   );
-}
+};
 
 const useStyles = makeStyles((theme) => {
   return {
     containerLayout: {
-      maxWidth: 800
+      maxWidth: 800,
     },
     toolbar: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'flex-end',
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "flex-end",
       padding: theme.spacing(0, 1),
       // necessary for content to be below app bar
       ...theme.mixins.toolbar,
@@ -51,5 +47,5 @@ const useStyles = makeStyles((theme) => {
       flexGrow: 1,
       padding: theme.spacing(3),
     },
-  }
+  };
 });
