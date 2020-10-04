@@ -1,6 +1,8 @@
 import { rest } from "msw";
 
-import postsResponse from "./posts.mock-data.json";
+import { postsDummyResponse } from "./posts.dummy-data";
+
+const postsResponse = postsDummyResponse();
 
 export const postsMocks = [
   rest.get(
