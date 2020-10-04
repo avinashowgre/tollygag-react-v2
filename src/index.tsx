@@ -1,17 +1,51 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React, { useState } from "react";
+import { render } from "react-dom";
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+import { Provider } from "react-redux";
+import { appStore } from "./slices/app-store";
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+import { HashRouter } from "react-router-dom";
+
+import "./index.css";
+
+import { Header } from "./components/Header";
+import { MainContent } from "./components/MainContent";
+import { LeftDrawer } from "./components/LeftDrawer";
+
+import CssBaseline from "@material-ui/core/CssBaseline";
+import { makeStyles } from "@material-ui/core/styles";
+
+export const App = () => {
+  const classes = useStyles();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  return (
+    <div className={classes.root}>
+      <Provider store={appStore}>
+        <HashRouter>
+          <CssBaseline />
+          <Header handleDrawerToggle={handleDrawerToggle} />
+          <LeftDrawer
+            handleDrawerToggle={handleDrawerToggle}
+            mobileOpen={mobileOpen}
+          />
+          <MainContent />
+        </HashRouter>
+      </Provider>
+    </div>
+  );
+};
+
+const useStyles = makeStyles(() => {
+  return {
+    root: {
+      display: "flex",
+    },
+  };
+});
+
+render(<App />, document.getElementById("root"));
