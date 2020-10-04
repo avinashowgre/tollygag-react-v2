@@ -13,8 +13,8 @@ type Metadata = {
   size: {
     width: number;
     height: number;
-  }
-}
+  };
+};
 
 type Author = {
   headline: string;
@@ -22,15 +22,15 @@ type Author = {
   image: {
     url: string;
     meta: Metadata;
-  }
+  };
   name: string;
-}
+};
 
 type SocialStats = {
   comments: number;
   downvotes: number;
   upvotes: number;
-}
+};
 
 type Content = {
   meta: Metadata;
@@ -38,9 +38,9 @@ type Content = {
   subType: string;
   type: string;
   url: string;
-}
+};
 
-export type GetPostTO = {
+export type PostTO = {
   author: Author;
   body: string;
   content: Content;
@@ -49,15 +49,15 @@ export type GetPostTO = {
   socialStats: SocialStats;
   title: string;
   type: string;
-}
+};
 
-export type GetPostCommentTO = {
+export type PostCommentTO = {
   body: string;
   email: string;
   id: number;
   name: string;
   postId: number;
-}
+};
 
 export type MemeTO = {
   box_count: number;
@@ -66,4 +66,4 @@ export type MemeTO = {
   name: string;
   url: string;
   width: string;
-}
+};

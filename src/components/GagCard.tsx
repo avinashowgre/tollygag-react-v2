@@ -10,7 +10,7 @@ import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import ReportIcon from "@material-ui/icons/Report";
 
-import { GetPostTO } from "../api/api.types";
+import { PostTO } from "../api/api.types";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
@@ -18,7 +18,7 @@ import { SocialMediaShare } from "./SocialMediaShare";
 import Tooltip from "@material-ui/core/Tooltip";
 
 type GagCardProps = {
-  post: GetPostTO;
+  post: PostTO;
   handleOnClick: Function;
 };
 

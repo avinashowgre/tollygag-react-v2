@@ -1,11 +1,11 @@
-import { wretchGet } from './ExternalApi';
-import { GetPostCommentTO } from './api.types';
+import { wretchGet } from "./ExternalApi";
+import { PostCommentTO } from "./api.types";
 
 type GetPostCommentsParams = {
   id: number;
 };
 
-export function getPostComments (params: GetPostCommentsParams) {
+export function getPostComments(params: GetPostCommentsParams) {
   const { id } = params;
-  return wretchGet<GetPostCommentTO[]>({ route: `posts/${id}/comments` });
+  return wretchGet<PostCommentTO[]>({ route: `posts/${id}/comments` });
 }

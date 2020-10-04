@@ -1,9 +1,9 @@
 import { wretchGet } from "../ExternalApi";
 
-import { GetPostTO } from "../api.types";
+import { PostTO } from "../api.types";
 
 type GetPostsResponse = {
-  items: GetPostTO[];
+  items: PostTO[];
 };
 
 export function getPosts() {
