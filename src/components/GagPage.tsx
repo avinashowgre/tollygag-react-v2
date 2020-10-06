@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, withRouter } from "react-router-dom";
 
 import { PostTO } from "../api/api.types";
-import { getPost } from "../api/get-post.api";
+import { getPost } from "../api/post/post.api";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 
