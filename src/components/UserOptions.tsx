@@ -7,6 +7,7 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import { Login } from "./Login";
 
 type UserOptionsProps = any;
 
@@ -15,8 +16,7 @@ export function UserOptions(props: UserOptionsProps) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const ITEM_HEIGHT = 48;
-
-  const [loggedIn, setLoggedIn] = useState(false);
+  const loggedIn = false;
 
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -25,10 +25,6 @@ export function UserOptions(props: UserOptionsProps) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  setTimeout(() => {
-    setLoggedIn(true);
-  }, 2000);
 
   return (
     <div className={classes.sectionDesktop}>
@@ -62,9 +58,7 @@ export function UserOptions(props: UserOptionsProps) {
         </Fragment>
       ) : (
         <Fragment>
-          <Button color="inherit" className={classes.btn}>
-            Login
-          </Button>
+          <Login />
           <Button color="primary" variant="contained" className={classes.btn}>
             Register
           </Button>
