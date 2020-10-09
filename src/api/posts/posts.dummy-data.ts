@@ -5,7 +5,7 @@ export function postsDummyResponse(responseLen: number = 3) {
     "headline": "{{lorem min=1 max=10}}",
     "id": {{int 1 100}},
     "image": {
-      "url": "/assets/img{{@index}}.jpg",
+      "url": "https://i.pinimg.com/originals/50/c8/14/50c81499ee1398f5108fe6580887879b.jpg",
       "meta": {{> metadata}}
     },
     "name": "{{firstName}} {{lastName}}"
@@ -16,7 +16,7 @@ export function postsDummyResponse(responseLen: number = 3) {
     "source": "{{lorem min=1 max=5}}",
     "subType": "{{lorem min=1 max=5}}",
     "type": "{{lorem min=1 max=5}}",
-    "url": "/assets/img{{@index}}.jpg"
+    "url": "https://media0.giphy.com/media/HoZ4p20ix5h8A/giphy.gif?cid=ecf05e4729280bf576cbeb19aa461af57bd91d780b20b90c&rid=giphy.gif"
   }`;
 
   const metadata = `{

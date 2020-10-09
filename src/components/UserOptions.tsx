@@ -8,6 +8,8 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { Login } from "./Login";
 import { SignUp } from "./SignUp";
+import Hidden from "@material-ui/core/Hidden";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
 
 type UserOptionsProps = any;
 
@@ -27,41 +29,78 @@ export function UserOptions(props: UserOptionsProps) {
   };
 
   return (
-    <div className={classes.sectionDesktop}>
-      {loggedIn ? (
-        <Fragment>
-          <IconButton
-            edge="end"
-            aria-label="account of current user"
-            aria-haspopup="true"
-            onClick={handleClick}
-            color="inherit"
-          >
-            <AccountCircle />
-          </IconButton>
-          <Menu
-            id="long-menu"
-            anchorEl={anchorEl}
-            keepMounted
-            open={open}
-            onClose={handleClose}
-            PaperProps={{
-              style: {
-                maxHeight: ITEM_HEIGHT * 4.5,
-                width: "20ch",
-              },
-            }}
-          >
-            <MenuItem onClick={handleClose}>My account</MenuItem>
-            <MenuItem onClick={handleClose}>Logout</MenuItem>
-          </Menu>
-        </Fragment>
-      ) : (
-        <Fragment>
-          <Login />
-          <SignUp />
-        </Fragment>
-      )}
+    <div>
+      <Hidden smUp implementation="css">
+        <IconButton aria-label="settings" color="inherit" onClick={handleClick}>
+          <MoreVertIcon />
+        </IconButton>
+
+        <Menu
+          id="long-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={open}
+          onClose={handleClose}
+          PaperProps={{
+            style: {
+              maxHeight: ITEM_HEIGHT * 4.5,
+              width: "20ch",
+            },
+          }}
+        >
+          {loggedIn ? (
+            <Fragment>
+              <MenuItem onClick={handleClose}>My account</MenuItem>
+              <MenuItem onClick={handleClose}>Logout</MenuItem>
+            </Fragment>
+          ) : (
+            <Fragment>
+              <MenuItem>
+                <Login />
+              </MenuItem>
+              <MenuItem>
+                <SignUp />
+              </MenuItem>
+            </Fragment>
+          )}
+        </Menu>
+      </Hidden>
+      <Hidden xsDown implementation="css">
+        {loggedIn ? (
+          <Fragment>
+            <IconButton
+              edge="end"
+              aria-label="account of current user"
+              aria-haspopup="true"
+              onClick={handleClick}
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+            <Menu
+              id="long-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={open}
+              onClose={handleClose}
+              PaperProps={{
+                style: {
+                  maxHeight: ITEM_HEIGHT * 4.5,
+                  width: "20ch",
+                },
+              }}
+            >
+              <MenuItem onClick={handleClose}>My account</MenuItem>
+              <MenuItem onClick={handleClose}>Logout</MenuItem>
+            </Menu>
+          </Fragment>
+        ) : (
+          <Fragment>
+            <Login />
+            <SignUp />
+          </Fragment>
+        )}
+      </Hidden>
     </div>
   );
 }

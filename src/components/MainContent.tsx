@@ -15,7 +15,7 @@ export const MainContent = (props: MainContentProps) => {
   return (
     <main className={classes.content}>
       <div className={classes.toolbar} />
-      <Container>
+      <Container className={classes.contentContainer}>
         <Switch>
           <Route exact path="/gag/:id">
             <GagWithRouter />
@@ -46,6 +46,13 @@ const useStyles = makeStyles((theme) => {
     content: {
       flexGrow: 1,
       padding: theme.spacing(3),
+    },
+    contentContainer: {
+      alignItems: "center",
+      display: "flex",
+      justifyContent: "center",
+      padding: theme.spacing(5),
+      flexDirection: "column",
     },
   };
 });

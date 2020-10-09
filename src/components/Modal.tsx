@@ -11,7 +11,7 @@ import {
 type ModalProps = DialogProps & {
   children: ReactNode;
   modalActions?: ReactNode;
-  title: string;
+  title: ReactNode;
 };
 
 export function Modal(props: ModalProps) {
