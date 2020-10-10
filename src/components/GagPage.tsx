@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, withRouter } from "react-router-dom";
 
-import { GetPostTO } from "../api/api.types";
-import { getPost } from "../api/get-post.api";
+import { PostTO } from "../api/api.types";
+import { getPost } from "../api/post/post.api";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -12,7 +12,7 @@ type GagProps = any;
 
 const Gag = (props: GagProps) => {
   let { id } = useParams();
-  const [post, setPost] = useState<GetPostTO | undefined>();
+  const [post, setPost] = useState<PostTO | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {

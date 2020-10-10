@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 
 import { withRouter } from "react-router-dom";
 
-import { GetPostTO } from "../api/api.types";
-import { getPosts } from "../api/get-posts.api";
+import { PostTO } from "../api/api.types";
+import { getPosts } from "../api/posts/posts.api";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { GagCard } from "./GagCard";
@@ -12,7 +12,7 @@ type HomeProps = any;
 
 const Home = (props: HomeProps) => {
   const { history } = props;
-  const [posts, setPosts] = useState<GetPostTO[]>([]);
+  const [posts, setPosts] = useState<PostTO[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {

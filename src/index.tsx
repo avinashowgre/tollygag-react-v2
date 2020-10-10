@@ -15,6 +15,8 @@ import { LeftDrawer } from "./components/LeftDrawer";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { makeStyles } from "@material-ui/core/styles";
 
+import { hrefPrehashContains } from "./common/href-prehash-contains";
+
 export const App = () => {
   const classes = useStyles();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -47,5 +49,12 @@ const useStyles = makeStyles(() => {
     },
   };
 });
+
+if (process.env.NODE_ENV === "development") {
+  if (hrefPrehashContains("mock=1")) {
+    const { worker } = require("./mocks/browser");
+    worker.start();
+  }
+}
 
 render(<App />, document.getElementById("root"));
