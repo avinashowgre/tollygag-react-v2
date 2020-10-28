@@ -47,19 +47,19 @@ export function UserOptions(props: UserOptionsProps) {
           }}
         >
           {loggedIn ? (
-            <Fragment>
+            <div>
               <MenuItem onClick={handleClose}>My account</MenuItem>
               <MenuItem onClick={handleClose}>Logout</MenuItem>
-            </Fragment>
+            </div>
           ) : (
-            <Fragment>
+            <div>
               <MenuItem>
                 <Login />
               </MenuItem>
               <MenuItem>
                 <SignUp />
               </MenuItem>
-            </Fragment>
+            </div>
           )}
         </Menu>
       </Hidden>

@@ -6,7 +6,12 @@ import TextField from "@material-ui/core/TextField";
 import { Modal } from "./Modal";
 import Button from "@material-ui/core/Button";
 
-export function Login() {
+type LoginProps = {
+  text?: string;
+};
+
+export function Login(props: LoginProps) {
+  const { text = "Login" } = props;
   const [open, setOpen] = useState<boolean>(false);
   const classes = useStyles();
 
@@ -21,7 +26,7 @@ export function Login() {
   return (
     <Fragment>
       <Button color="inherit" className={classes.btn} onClick={handleOpen}>
-        Login
+        {text}
       </Button>
       <Modal
         open={open}
