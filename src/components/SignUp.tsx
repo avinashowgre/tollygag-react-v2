@@ -4,10 +4,10 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
 import { makeStyles } from "@material-ui/core/styles";
 import { Modal } from "./Modal";
 import Grid from "@material-ui/core/Grid";
+import { Login } from "./Login";
 
 const useStyles = makeStyles((theme) => ({
   btn: {
@@ -118,9 +118,7 @@ export function SignUp() {
             </Button>
             <Grid container justify="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
-                  Already have an account? Sign in
-                </Link>
+                <Login text="Already have an account? Sign in" />
               </Grid>
             </Grid>
           </form>
