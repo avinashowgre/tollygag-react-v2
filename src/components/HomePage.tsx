@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 
 import { withRouter } from "react-router-dom";
 
@@ -31,7 +31,6 @@ const Home = (props: HomeProps) => {
   }, []);
 
   function viewGag(gagId: number) {
-    console.log(gagId);
     history.push(`/gag/${gagId}`);
   }
 
@@ -40,11 +39,11 @@ const Home = (props: HomeProps) => {
   }
 
   return (
-    <div>
+    <Fragment>
       {posts.map((post, index) => (
         <GagCard key={index} post={post} handleOnClick={viewGag} />
       ))}
-    </div>
+    </Fragment>
   );
 };
 

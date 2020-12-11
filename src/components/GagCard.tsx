@@ -95,7 +95,7 @@ export function GagCard(props: GagCardProps) {
 const useStyles = makeStyles(theme => ({
   root: {
     marginBottom: 20,
-    maxWidth: 500
+    maxWidth: 600
   },
   iconBtn: {
     marginLeft: "auto"
