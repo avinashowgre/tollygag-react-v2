@@ -10,7 +10,6 @@ import "./index.css";
 
 import { Header } from "./components/Header";
 import { MainContent } from "./components/MainContent";
-import { LeftDrawer } from "./components/LeftDrawer";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { makeStyles } from "@material-ui/core/styles";
@@ -31,8 +30,10 @@ export const App = () => {
         <HashRouter>
           <CssBaseline />
           <Header handleDrawerToggle={handleDrawerToggle} />
-          <MainContent handleDrawerToggle={handleDrawerToggle}
-            mobileOpen={mobileOpen} />
+          <MainContent
+            handleDrawerToggle={handleDrawerToggle}
+            mobileOpen={mobileOpen}
+          />
         </HashRouter>
       </Provider>
     </div>
