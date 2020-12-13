@@ -16,7 +16,7 @@ export function postsDummyResponse(responseLen: number = 3) {
     "source": "{{lorem min=1 max=5}}",
     "subType": "{{lorem min=1 max=5}}",
     "type": "{{lorem min=1 max=5}}",
-    "url": "https://media0.giphy.com/media/HoZ4p20ix5h8A/giphy.gif?cid=ecf05e4729280bf576cbeb19aa461af57bd91d780b20b90c&rid=giphy.gif"
+    "url": "https://pbs.twimg.com/media/Do4wZLHW0AAXxYw.jpg"
   }`;
 
   const metadata = `{

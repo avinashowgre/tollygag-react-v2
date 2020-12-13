@@ -31,11 +31,8 @@ export const App = () => {
         <HashRouter>
           <CssBaseline />
           <Header handleDrawerToggle={handleDrawerToggle} />
-          <LeftDrawer
-            handleDrawerToggle={handleDrawerToggle}
-            mobileOpen={mobileOpen}
-          />
-          <MainContent />
+          <MainContent handleDrawerToggle={handleDrawerToggle}
+            mobileOpen={mobileOpen} />
         </HashRouter>
       </Provider>
     </div>

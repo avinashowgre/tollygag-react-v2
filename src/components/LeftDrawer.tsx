@@ -33,7 +33,7 @@ export function LeftDrawer(props: LeftDrawerProps) {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+        {["Inbox", "Starred", "Send email", "Drafts", "Inbox1", "Starred1", "Send email1", "Drafts2", "Inbox2", "Starred2", "Send email2", "Drafts3"].map((text, index) => (
           <ListItem button key={text}>
             <ListItemIcon>
               {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
@@ -63,7 +63,6 @@ export function LeftDrawer(props: LeftDrawerProps) {
         <Drawer
           container={container}
           variant="temporary"
-          anchor={theme.direction === "rtl" ? "right" : "left"}
           open={mobileOpen}
           onClose={(e) => handleDrawerToggle(e)}
           classes={{
@@ -100,6 +99,7 @@ const useStyles = makeStyles((theme: any) => {
       },
     },
     drawerPaper: {
+      left: 'unset',
       width: drawerWidth,
     },
     toolbar: theme.mixins.toolbar,
