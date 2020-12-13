@@ -1,5 +1,4 @@
 import React, { useState, Fragment } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 
 import AccountCircle from "@material-ui/icons/AccountCircle";
 
@@ -14,7 +13,6 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 type UserOptionsProps = any;
 
 export function UserOptions(props: UserOptionsProps) {
-  const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const ITEM_HEIGHT = 48;
@@ -104,17 +102,3 @@ export function UserOptions(props: UserOptionsProps) {
     </div>
   );
 }
-
-const useStyles = makeStyles((theme: any) => {
-  return {
-    sectionDesktop: {
-      display: "none",
-      [theme.breakpoints.up("md")]: {
-        display: "flex",
-      },
-    },
-    btn: {
-      marginRight: theme.spacing(1),
-    },
-  };
-});
