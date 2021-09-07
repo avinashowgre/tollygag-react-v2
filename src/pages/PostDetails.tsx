@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { useParams, withRouter } from "react-router-dom";
 
 import { PostTO } from "../api/api.types";
@@ -6,12 +6,13 @@ import { getPost } from "../api/post/post.api";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-import { CommentsSection } from "./Comments";
+import { CommentsSection } from "../components/atoms/Comments";
+import Grid from "@material-ui/core/Grid";
 
-type GagProps = any;
+type PostProps = any;
 
-const Gag = (props: GagProps) => {
-  let { id } = useParams();
+const PostDetails = (props: PostProps) => {
+  let { id } = useParams<any>();
   const [post, setPost] = useState<PostTO | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -30,15 +31,21 @@ const Gag = (props: GagProps) => {
       });
   }, [id]);
 
+  let content: ReactNode = ``;
+
   if (loading || !post) {
-    return <CircularProgress />;
+    content = <CircularProgress />;
+  }
+
+  if (!loading && post) {
+    content = <CommentsSection />;
   }
 
   return (
-    <div>
-      <CommentsSection />
-    </div>
+    <Grid container justify={"center"} spacing={2}>
+      {content}
+    </Grid>
   );
 };
 
-export const GagWithRouter = withRouter(Gag);
+export const PostDetailsWithRouter = withRouter(PostDetails);

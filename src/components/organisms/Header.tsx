@@ -6,7 +6,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
-import { UserOptions } from "./UserOptions";
+import { UserOptions } from "../atoms/UserOptions";
 import Hidden from "@material-ui/core/Hidden";
 
 const drawerWidth = 240;
@@ -43,7 +43,7 @@ export const Header = (props: HeaderProps) => {
           noWrap
           onClick={redirectToHome}
         >
-          TollyGAG
+          TGAG
         </Typography>
         <div className={classes.grow} />
         <UserOptions />

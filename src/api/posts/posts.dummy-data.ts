@@ -1,6 +1,6 @@
 import dummyjson from "dummy-json";
 
-export function postsDummyResponse(responseLen: number = 3) {
+export function postsDummyResponse(responseLen: number = 12) {
   const author = `{
     "headline": "{{lorem min=1 max=10}}",
     "id": {{int 1 100}},

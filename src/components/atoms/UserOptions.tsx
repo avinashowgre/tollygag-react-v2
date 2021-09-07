@@ -6,7 +6,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { Login } from "./Login";
-import { SignUp } from "./SignUp";
+import { SignUp } from "../organisms/SignUp";
 import Hidden from "@material-ui/core/Hidden";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 

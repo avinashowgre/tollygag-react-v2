@@ -39,8 +39,20 @@ export function Login() {
         }
       >
         <form className={classes.root} noValidate autoComplete="off">
-          <TextField id="username" label="Username" name="username" />
-          <TextField id="password" label="Password" name="password" />
+          <TextField
+            variant="outlined"
+            required
+            id="username"
+            label="Username"
+            name="username"
+          />
+          <TextField
+            variant="outlined"
+            required
+            id="password"
+            label="Password"
+            name="password"
+          />
         </form>
       </Modal>
     </Fragment>

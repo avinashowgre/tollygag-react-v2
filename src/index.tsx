@@ -8,8 +8,8 @@ import { HashRouter } from "react-router-dom";
 
 import "./index.css";
 
-import { Header } from "./components/Header";
-import { MainContent } from "./components/MainContent";
+import { Header } from "./components/organisms/Header";
+import { MainContent } from "./pages/MainContent";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { makeStyles } from "@material-ui/core/styles";

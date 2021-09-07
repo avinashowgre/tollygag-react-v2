@@ -7,7 +7,9 @@ import CardActions from "@material-ui/core/CardActions";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
+import Fade from "@material-ui/core/Fade";
 import IconButton from "@material-ui/core/IconButton";
+import Link from "@material-ui/core/Link";
 import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
 
@@ -16,8 +18,8 @@ import ReportIcon from "@material-ui/icons/Report";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 
-import { PostTO } from "../api/api.types";
-import { SocialMediaShare } from "./SocialMediaShare";
+import { PostTO } from "../../api/api.types";
+import { SocialMediaShare } from "../atoms/SocialMediaShare";
 
 type GagCardProps = {
   post: PostTO;
@@ -35,7 +37,7 @@ const StyledBadge = withStyles((theme) => ({
   },
 }))(Badge);
 
-export function GagCard(props: GagCardProps) {
+export function PostCard(props: GagCardProps) {
   const { post, handleOnClick } = props;
   const classes = useStyles();
   const [postLiked, setPostLiked] = useState<boolean>(false);
@@ -44,7 +46,19 @@ export function GagCard(props: GagCardProps) {
   const [postDownvotes, setPostDownvotes] = useState(
     post.socialStats.downvotes
   );
+
+  // eslint-disable-next-line
   const [postGag, setPostGag] = useState(post);
+
+  useEffect(() => {
+    const imgElem = document.getElementById(`img-${postGag.id}`);
+    if (imgElem) {
+      imgElem.onload = () => {
+        document.getElementById(`img-overlay-${postGag.id}`)!.style.display =
+          imgElem && imgElem.clientHeight <= 363 ? "none" : "block";
+      };
+    }
+  });
 
   const onPostLikeToggle = () => {
     setPostLiked((postLiked) => {
@@ -72,20 +86,37 @@ export function GagCard(props: GagCardProps) {
 
   return (
     <Card className={classes.root}>
-      {postUpvotes}
-      <CardActionArea onClick={() => handleOnClick(postGag.id)}>
+      <CardActionArea>
         <CardContent>
-          <Tooltip title={postGag.title}>
+          <Tooltip
+            title={postGag.title}
+            TransitionComponent={Fade}
+            TransitionProps={{ timeout: 600 }}
+          >
             <Typography variant="h6" noWrap>
-              {postGag.title}
+              <Link
+                onClick={() => handleOnClick(postGag.id)}
+                underline={"none"}
+              >
+                <strong>{postGag.title}</strong>
+              </Link>
             </Typography>
           </Tooltip>
         </CardContent>
-        <CardMedia
-          component="img"
-          image={postGag.content.url}
-          title={postGag.title}
-        />
+        <div className={classes.cardMedia}>
+          <CardMedia
+            component="img"
+            classes={{ root: classes.imgMedia }}
+            id={`img-${postGag.id}`}
+            image={postGag.content.url}
+            title={postGag.title}
+          />
+        </div>
+        <div id={`img-overlay-${postGag.id}`} className={classes.imgOverlay}>
+          <Link onClick={() => alert("clicked")}>
+            <p>Click to expand the post</p>
+          </Link>
+        </div>
       </CardActionArea>
       <CardActions disableSpacing>
         <IconButton aria-label="like" onClick={(e) => onPostLikeToggle()}>
@@ -119,6 +150,36 @@ export function GagCard(props: GagCardProps) {
 }
 
 const useStyles = makeStyles((theme) => ({
+  cardMedia: {
+    alignItems: "center",
+    display: "flex",
+    justifyContent: "center",
+    maxHeight: 363,
+    minHeight: 363,
+    objectFit: "unset",
+    overflow: "hidden",
+    padding: 10,
+    position: "relative",
+    [theme.breakpoints.down("md")]: {
+      maxHeight: 800,
+    },
+  },
+  imgOverlay: {
+    backgroundColor: "white",
+    bottom: 0,
+    boxShadow: "0 -4px 8px 0 rgba(0,0,0,0.2)",
+    height: "50px",
+    position: "absolute",
+    textAlign: "center",
+    width: "100%",
+  },
+  imgMedia: {
+    position: "absolute",
+    top: 0,
+    [theme.breakpoints.down("md")]: {
+      position: "relative",
+    },
+  },
   root: {
     marginBottom: 20,
     maxWidth: 600,

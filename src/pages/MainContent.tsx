@@ -2,13 +2,12 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 
-import { HomeWithRouter } from "./HomePage";
-import { GagWithRouter } from "./GagPage";
+import { HomeWithRouter } from "./Home";
+import { PostDetailsWithRouter } from "./PostDetails";
 import { NotFoundPage } from "./NotFoundPage";
-import { LeftDrawer } from "./LeftDrawer";
+import { LeftDrawer } from "../components/organisms/LeftDrawer";
 import { CreatePostWithRouter } from "./CreatePost";
 
 type MainContentProps = any;
@@ -19,30 +18,28 @@ export const MainContent = (props: MainContentProps) => {
   return (
     <main className={classes.content}>
       <div className={classes.toolbar} />
-      <Container className={classes.contentContainer}>
-        <Grid container>
-          <Grid item>
-            <LeftDrawer
-              handleDrawerToggle={handleDrawerToggle}
-              mobileOpen={mobileOpen}
-            />
-          </Grid>
-          <Grid item className={classes.cardContent}>
-            <Switch>
-              <Route exact path="/gag/:id">
-                <GagWithRouter />
-              </Route>
-              <Route exact path="/create/post">
-                <CreatePostWithRouter />
-              </Route>
-              <Route exact path="/">
-                <HomeWithRouter />
-              </Route>
-              <Route path="*" component={NotFoundPage} />
-            </Switch>
-          </Grid>
+      <Grid container>
+        <Grid item md={2} lg={2}>
+          <LeftDrawer
+            handleDrawerToggle={handleDrawerToggle}
+            mobileOpen={mobileOpen}
+          />
         </Grid>
-      </Container>
+        <Grid item className={classes.cardContent} xs={12} md={10} lg={10}>
+          <Switch>
+            <Route exact path="/gag/:id">
+              <PostDetailsWithRouter />
+            </Route>
+            <Route exact path="/create/post">
+              <CreatePostWithRouter />
+            </Route>
+            <Route exact path="/">
+              <HomeWithRouter />
+            </Route>
+            <Route path="*" component={NotFoundPage} />
+          </Switch>
+        </Grid>
+      </Grid>
     </main>
   );
 };

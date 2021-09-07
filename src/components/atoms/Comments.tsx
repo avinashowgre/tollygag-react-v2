@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { PostCommentTO } from "../api/api.types";
-import { getPostComments } from "../api/get-post-comment.api";
+import { PostCommentTO } from "../../api/api.types";
+import { getPostComments } from "../../api/get-post-comment.api";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 type CommentsProps = any;
 
 export function CommentsSection(props: CommentsProps) {
-  const { id } = useParams();
+  const { id } = useParams<any>();
   const [postComments, setPostComments] = useState<
     PostCommentTO[] | undefined
   >();
