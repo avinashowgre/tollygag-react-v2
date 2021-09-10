@@ -24,6 +24,7 @@ import { SocialMediaShare } from "../atoms/SocialMediaShare";
 type GagCardProps = {
   post: PostTO;
   handleOnClick: Function;
+  handleOnExpandPostClick?: Function;
 };
 
 const StyledBadge = withStyles((theme) => ({
@@ -38,7 +39,7 @@ const StyledBadge = withStyles((theme) => ({
 }))(Badge);
 
 export function PostCard(props: GagCardProps) {
-  const { post, handleOnClick } = props;
+  const { post, handleOnClick, handleOnExpandPostClick } = props;
   const classes = useStyles();
   const [postLiked, setPostLiked] = useState<boolean>(false);
   const [postDisliked, setPostDisliked] = useState<boolean>(false);
@@ -113,9 +114,11 @@ export function PostCard(props: GagCardProps) {
           />
         </div>
         <div id={`img-overlay-${postGag.id}`} className={classes.imgOverlay}>
-          <Link onClick={() => alert("clicked")}>
-            <p>Click to expand the post</p>
-          </Link>
+          {handleOnExpandPostClick && (
+            <Link onClick={() => handleOnExpandPostClick(postGag)}>
+              <p>Click to expand the post</p>
+            </Link>
+          )}
         </div>
       </CardActionArea>
       <CardActions disableSpacing>
@@ -133,7 +136,7 @@ export function PostCard(props: GagCardProps) {
 
         <div className={classes.iconBtn}>
           <IconButton aria-label="cart">
-            <StyledBadge badgeContent={364} max={999}>
+            <StyledBadge badgeContent={postGag.socialStats.comments} max={999}>
               <CommentIcon />
             </StyledBadge>
           </IconButton>
