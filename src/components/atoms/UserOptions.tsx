@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState } from "react";
 
 import AccountCircle from "@material-ui/icons/AccountCircle";
 
@@ -47,25 +47,25 @@ export function UserOptions(props: UserOptionsProps) {
           }}
         >
           {loggedIn ? (
-            <Fragment>
+            <>
               <MenuItem onClick={handleClose}>My account</MenuItem>
               <MenuItem onClick={handleClose}>Logout</MenuItem>
-            </Fragment>
+            </>
           ) : (
-            <Fragment>
+            <>
               <MenuItem>
                 <Login />
               </MenuItem>
               <MenuItem>
                 <SignUp />
               </MenuItem>
-            </Fragment>
+            </>
           )}
         </Menu>
       </Hidden>
       <Hidden xsDown implementation="css">
         {loggedIn ? (
-          <Fragment>
+          <>
             <IconButton
               edge="end"
               aria-label="account of current user"
@@ -91,12 +91,12 @@ export function UserOptions(props: UserOptionsProps) {
               <MenuItem onClick={handleClose}>My account</MenuItem>
               <MenuItem onClick={handleClose}>Logout</MenuItem>
             </Menu>
-          </Fragment>
+          </>
         ) : (
-          <Fragment>
+          <>
             <Login />
             <SignUp />
-          </Fragment>
+          </>
         )}
       </Hidden>
     </div>

@@ -65,6 +65,7 @@ export function PostCard(props: GagCardProps) {
     setPostLiked((postLiked) => {
       if (!postLiked) {
         setPostUpvotes((postUpvotes) => postUpvotes + 1);
+        setPostDownvotes(post.socialStats.downvotes);
       } else {
         setPostUpvotes(post.socialStats.upvotes);
       }
@@ -77,6 +78,7 @@ export function PostCard(props: GagCardProps) {
     setPostDisliked((postDisliked) => {
       if (!postDisliked) {
         setPostDownvotes((postDownvotes) => postDownvotes + 1);
+        setPostUpvotes(post.socialStats.upvotes);
       } else {
         setPostDownvotes(post.socialStats.downvotes);
       }
