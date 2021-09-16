@@ -59,7 +59,7 @@ export function Login() {
   );
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: any) => ({
   root: {
     "& > *": {
       margin: theme.spacing(1),

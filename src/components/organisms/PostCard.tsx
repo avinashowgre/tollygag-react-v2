@@ -89,7 +89,7 @@ export function PostCard(props: GagCardProps) {
 
   return (
     <Card className={classes.root}>
-      <CardActionArea>
+      <CardActionArea onClick={() => handleOnClick(postGag.id)}>
         <CardContent>
           <Tooltip
             title={postGag.title}
@@ -97,10 +97,7 @@ export function PostCard(props: GagCardProps) {
             TransitionProps={{ timeout: 600 }}
           >
             <Typography variant="h6" noWrap>
-              <Link
-                onClick={() => handleOnClick(postGag.id)}
-                underline={"none"}
-              >
+              <Link underline={"none"}>
                 <strong>{postGag.title}</strong>
               </Link>
             </Typography>
