@@ -1,32 +1,36 @@
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import { withRouter } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core/styles";
+
+import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 
 import { CustomDialog } from "../components/organisms/CustomDialog";
 import { CustomImageGallery } from "../components/organisms/CustomImageGallery";
+import { MemeLayout } from "../components/organisms/MemeLayout";
+import { Separator } from "../components/atoms/Separator";
+
 import { getMemes } from "../api/get-memes.api";
-import { Button } from "@material-ui/core";
 
 const CreatePost = () => {
-  const classes = useStyles();
   const [open, setOpen] = useState<boolean>(false);
   const [dialogTitle, setDialogTitle] = useState<string>("");
-  const [dialogContent, setDialogContent] = useState<any>([]);
+  const [dialogContent, setDialogContent] = useState<ReactNode>();
+  const classes = useStyles();
 
   function getImgFlipTemplates() {
     getMemes().then((data) => {
       setOpen(true);
       setDialogTitle("Custom Available Meme templates");
-      setDialogContent(data.memes);
+      setDialogContent(<CustomImageGallery itemData={data.memes} />);
     });
   }
 
   return (
     <Grid container className={classes.createPostContainer} spacing={2}>
-      <Grid item lg={8}>
+      <Grid item lg={8} md={8} sm={8}>
         <Grid container direction="column">
           <Grid item lg={12}>
             <TextField
@@ -38,25 +42,65 @@ const CreatePost = () => {
               variant="outlined"
             />
           </Grid>
-          <Grid item lg={12}>
-            Grid 1-2
+          <Separator text={"( OR )"} />
+          <Grid container className={classes.dropZoneArea}>
+            <MemeLayout />
           </Grid>
         </Grid>
       </Grid>
-      <Grid item lg={4}>
-        Grid 2
-        <Button
-          onClick={getImgFlipTemplates}
-          color={"primary"}
-          variant={"contained"}
+      <Grid item lg={4} md={4} sm={4}>
+        <Grid container justifyContent={"space-around"}>
+          <Grid item>
+            <Button
+              color={"primary"}
+              onClick={getImgFlipTemplates}
+              variant={"contained"}
+            >
+              Save template
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button color={"primary"} variant={"contained"}>
+              Create Post
+            </Button>
+          </Grid>
+        </Grid>
+        <Grid
+          alignItems={"center"}
+          container
+          className={classes.createPostActionsContainer}
+          direction={"column"}
+          justifyContent={"center"}
+          spacing={2}
         >
-          Use custom memes
-        </Button>
+          <Grid className={classes.actionGrpBtn} item>
+            <Button color={"primary"} variant={"contained"} fullWidth>
+              Build custom template
+            </Button>
+          </Grid>
+          <Grid className={classes.actionGrpBtn} item>
+            <Button
+              color={"primary"}
+              onClick={getImgFlipTemplates}
+              variant={"contained"}
+              fullWidth
+            >
+              Use custom memes
+            </Button>
+          </Grid>
+
+          <Grid className={classes.actionGrpBtn} item>
+            <Button color={"primary"} variant={"contained"} fullWidth>
+              Add caption
+            </Button>
+          </Grid>
+        </Grid>
+
         <CustomDialog
           open={open}
           setOpen={setOpen}
           title={dialogTitle}
-          content={<CustomImageGallery itemData={dialogContent} />}
+          content={dialogContent}
         />
       </Grid>
     </Grid>
@@ -65,9 +109,25 @@ const CreatePost = () => {
 
 const useStyles = makeStyles(() => {
   return {
+    actionGrpBtn: {
+      minWidth: 240,
+    },
+    createPostActionsContainer: {
+      height: "80vh",
+    },
     createPostContainer: {
       backgroundColor: "white",
       height: "100vh",
+    },
+    dropZoneArea: {
+      border: "2px dotted #3f51b5",
+      borderRadius: 5,
+      flexGrow: 1,
+      minHeight: "calc(80vh - 20px)",
+      maxHeight: "calc(80vh - 20px)",
+      padding: 10,
+      position: "relative",
+      textAlign: "center",
     },
   };
 });

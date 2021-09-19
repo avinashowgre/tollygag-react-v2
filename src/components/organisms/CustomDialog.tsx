@@ -1,20 +1,21 @@
 import React, { ReactNode } from "react";
+
 import {
   createStyles,
   Theme,
   withStyles,
   WithStyles,
 } from "@material-ui/core/styles";
+
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
-import MuiDialogTitle from "@material-ui/core/DialogTitle";
-import MuiDialogContent from "@material-ui/core/DialogContent";
-import MuiDialogActions from "@material-ui/core/DialogActions";
 import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
+import MuiDialogActions from "@material-ui/core/DialogActions";
+import MuiDialogContent from "@material-ui/core/DialogContent";
+import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import Typography from "@material-ui/core/Typography";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import { useTheme } from "@material-ui/core/styles";
+
+import CloseIcon from "@material-ui/icons/Close";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -77,8 +78,6 @@ const DialogActions = withStyles((theme: Theme) => ({
 
 export function CustomDialog(props: Props) {
   const { content, footer = undefined, open, setOpen, title } = props;
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const handleClose = () => {
     setOpen(false);
   };
@@ -88,7 +87,7 @@ export function CustomDialog(props: Props) {
       onClose={handleClose}
       aria-labelledby="customized-dialog-title"
       open={open}
-      fullScreen={fullScreen}
+      maxWidth={"md"}
     >
       <DialogTitle id="customized-dialog-title" onClose={handleClose}>
         {title}

@@ -12,13 +12,15 @@ import { Header } from "./components/organisms/Header";
 import { MainContent } from "./pages/MainContent";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 import { hrefPrehashContains } from "./common/href-prehash-contains";
+import { ThemeProvider } from "@material-ui/core/styles";
 
 export const App = () => {
   const classes = useStyles();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const theme = useTheme();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -27,14 +29,16 @@ export const App = () => {
   return (
     <div className={classes.root}>
       <Provider store={appStore}>
-        <HashRouter>
-          <CssBaseline />
-          <Header handleDrawerToggle={handleDrawerToggle} />
-          <MainContent
-            handleDrawerToggle={handleDrawerToggle}
-            mobileOpen={mobileOpen}
-          />
-        </HashRouter>
+        <ThemeProvider theme={theme}>
+          <HashRouter>
+            <CssBaseline />
+            <Header handleDrawerToggle={handleDrawerToggle} />
+            <MainContent
+              handleDrawerToggle={handleDrawerToggle}
+              mobileOpen={mobileOpen}
+            />
+          </HashRouter>
+        </ThemeProvider>
       </Provider>
     </div>
   );

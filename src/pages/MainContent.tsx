@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, useLocation } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -9,30 +9,44 @@ import { PostDetailsWithRouter } from "./PostDetails";
 import { NotFoundPage } from "./NotFoundPage";
 import { LeftDrawer } from "../components/organisms/LeftDrawer";
 import { CreatePostWithRouter } from "./CreatePost";
+import { ProtectedRoute } from "../components/organisms/ProtectedRoute";
 
-type MainContentProps = any;
+type MainContentProps = {
+  handleDrawerToggle: () => void;
+  mobileOpen: boolean;
+};
 
 export const MainContent = (props: MainContentProps) => {
   const { handleDrawerToggle, mobileOpen } = props;
   const classes = useStyles();
+  const location = useLocation();
+
+  const isDrawerHidden = location.pathname.indexOf("/create/post") !== -1;
+
   return (
     <main className={classes.content}>
       <div className={classes.toolbar} />
       <Grid container>
-        <Grid item md={2} lg={2}>
-          <LeftDrawer
-            handleDrawerToggle={handleDrawerToggle}
-            mobileOpen={mobileOpen}
-          />
-        </Grid>
-        <Grid item className={classes.cardContent} xs={12} md={10} lg={10}>
+        {!isDrawerHidden && (
+          <Grid item md={2} lg={2}>
+            <LeftDrawer
+              handleDrawerToggle={handleDrawerToggle}
+              mobileOpen={mobileOpen}
+            />
+          </Grid>
+        )}
+        <Grid item className={classes.cardContent} xs={12} md>
           <Switch>
             <Route exact path="/gag/:id">
               <PostDetailsWithRouter />
             </Route>
-            <Route exact path="/create/post">
+            <ProtectedRoute
+              path="/create/post"
+              component={CreatePostWithRouter}
+            />
+            {/* <Route exact path="/create/post">
               <CreatePostWithRouter />
-            </Route>
+            </Route> */}
             <Route exact path="/">
               <HomeWithRouter />
             </Route>
@@ -62,7 +76,6 @@ const useStyles = makeStyles((theme) => {
     },
     content: {
       flexGrow: 1,
-      padding: theme.spacing(3),
     },
     contentContainer: {
       display: "flex",
