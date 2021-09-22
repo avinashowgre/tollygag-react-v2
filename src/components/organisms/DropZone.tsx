@@ -3,17 +3,29 @@ import { makeStyles } from "@material-ui/core/styles";
 import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import ClearIcon from "@material-ui/icons/Clear";
+import { renderMedia } from "../../common/image.utils";
 
 type Props = {
+  imgUrl?: string;
   orderIndex: string;
 };
 
 export function DropZone(props: Props) {
-  const { orderIndex } = props;
+  const { imgUrl, orderIndex } = props;
+
   const classes = useStyles();
+
   const canvasId = `drop-zone-${orderIndex}`;
   const overlayElemId = `overlay-elem-${orderIndex}`;
   const removeBtnId = `remove-${orderIndex}`;
+
+  if (imgUrl) {
+    fetch(imgUrl)
+      .then((res) => res.blob()) // Gets the response and returns it as a blob
+      .then((blob) => {
+        displayMeme(blob);
+      });
+  }
 
   function clearMeme() {
     const canvas = document.querySelector(`#${canvasId}`) as HTMLCanvasElement;
@@ -25,69 +37,40 @@ export function DropZone(props: Props) {
     ) as HTMLButtonElement;
 
     var ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.restore();
+
     canvas.style.display = "none";
     overlayElem.style.display = "block";
     clearMemeBtn.style.display = "none";
   }
 
-  function redrawMeme(image: CanvasImageSource) {
-    const removeTempBtn = document.querySelector(
-      `#${removeBtnId}`
-    ) as HTMLButtonElement;
-
+  function displayMeme(blob: Blob) {
+    const canvas = document.querySelector(`#${canvasId}`) as HTMLCanvasElement;
     const overlayElem = document.querySelector(
       `#${overlayElemId}`
     ) as HTMLDivElement;
+    const clearMemeBtn = document.querySelector(
+      `#${removeBtnId}`
+    ) as HTMLButtonElement;
+
     overlayElem.style.display = "none";
-    removeTempBtn.style.display = "block";
-
-    // Get Canvas2DContext
-    var canvas = document.querySelector(`#${canvasId}`) as HTMLCanvasElement;
     canvas.style.display = "block";
-    if (canvas) {
-      var ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
-      if (image != null)
-        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+    clearMemeBtn.style.display = "block";
 
-      // Text attributes
-      // ctx.font = "30pt Impact";
-      // ctx.textAlign = "center";
-      // ctx.strokeStyle = "black";
-      // ctx.lineWidth = 3;
-      // ctx.fillStyle = "white";
-    }
-
-    // if (topLine != null) {
-    //   ctx.fillText(topLine, canvas.width / 2, 40);
-    //   ctx.strokeText(topLine, canvas.width / 2, 40);
-    // }
-
-    // if (bottomLine != null) {
-    //   ctx.fillText(bottomLine, canvas.width / 2, canvas.height - 20);
-    //   ctx.strokeText(bottomLine, canvas.width / 2, canvas.height - 20);
-    // }
+    renderMedia(canvas, blob);
   }
 
   const onDrop = useCallback((acceptedFiles) => {
-    var file = acceptedFiles[0];
+    const file = acceptedFiles[0];
+    const blob = new Blob(
+      [file],
+      { type: file.type } // If the type is unknown, default is empty string.
+    );
 
-    var reader = new FileReader();
-    reader.onload = function (fileObject: any) {
-      var data = fileObject?.target.result;
-
-      // Create an image object
-      var image = new Image();
-      image.onload = function () {
-        (window as any).imageSrc = this;
-        redrawMeme((window as any).imageSrc);
-      };
-
-      // Set image data to background image.
-      image.src = data;
-    };
-    reader.readAsDataURL(file);
+    clearMeme();
+    displayMeme(blob);
     // eslint-disable-next-line
   }, []);
 
@@ -111,7 +94,12 @@ export function DropZone(props: Props) {
         <input {...getInputProps()} />
         <p>Drag 'n' drop some files here, or click to select files</p>
       </div>
-      <canvas className={classes.canvasElem} id={`${canvasId}`}></canvas>
+      <canvas
+        className={classes.canvasElem}
+        id={`${canvasId}`}
+        width="500"
+        height="500"
+      ></canvas>
     </div>
   );
 }
@@ -134,9 +122,9 @@ const useStyles = makeStyles(() => {
     canvasElem: {
       display: "none",
       height: "100%",
+      objectFit: "fill",
       position: "relative",
       width: "100%",
-      objectFit: "fill",
     },
     overlayElem: {
       top: 0,
@@ -144,6 +132,10 @@ const useStyles = makeStyles(() => {
       position: "absolute",
       width: "100%",
       height: "100%",
+      "& > p": {
+        position: "relative",
+        top: "50%",
+      },
     },
     root: {
       border: "2px dotted #3f51b5",

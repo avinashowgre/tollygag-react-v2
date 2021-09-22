@@ -73,7 +73,7 @@ const Home = (props: HomeProps) => {
   }
 
   return (
-    <Grid container justify={"center"} spacing={2}>
+    <Grid container justifyContent={"center"} spacing={2}>
       {content}
       <CustomDialog
         content={dialogContent}

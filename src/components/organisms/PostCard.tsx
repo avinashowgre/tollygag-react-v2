@@ -114,7 +114,12 @@ export function PostCard(props: GagCardProps) {
         </div>
         <div id={`img-overlay-${postGag.id}`} className={classes.imgOverlay}>
           {handleOnExpandPostClick && (
-            <Link onClick={() => handleOnExpandPostClick(postGag)}>
+            <Link
+              onClick={(e: any) => {
+                e.stopPropagation();
+                handleOnExpandPostClick(postGag);
+              }}
+            >
               <p>Click to expand the post</p>
             </Link>
           )}

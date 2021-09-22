@@ -16,7 +16,7 @@ export function UserOptions(props: UserOptionsProps) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const ITEM_HEIGHT = 48;
-  const loggedIn = false;
+  const loggedIn = true;
 
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);

@@ -13,20 +13,8 @@ export function MemeLayout(props: Props) {
   return (
     <>
       <Grid item className={classes.flexItem}>
-        <DropZone orderIndex={"1"} />
+        <DropZone {...props} orderIndex={"1"} />
       </Grid>
-      <Grid item className={classes.flexItem}>
-        <DropZone orderIndex={"2"} />
-      </Grid>
-      {/* <Grid item className={classes.flexItem}>
-        <DropZone orderIndex={"3"} />
-      </Grid>
-      <Grid item className={classes.flexItem}>
-        <DropZone orderIndex={"4"} />
-      </Grid>
-      <Grid item className={classes.flexItem}>
-        <DropZone orderIndex={"5"} />
-      </Grid>  */}
     </>
   );
 }
@@ -34,8 +22,7 @@ export function MemeLayout(props: Props) {
 const useStyles = makeStyles(() => {
   return {
     flexItem: {
-      flex: "1 0 auto",
-      minWidth: "30%",
+      minWidth: "80%",
       margin: 1,
     },
   };
