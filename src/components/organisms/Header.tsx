@@ -22,7 +22,7 @@ type HeaderProps = {
 export const Header = (props: HeaderProps) => {
   const { handleDrawerToggle } = props;
   const classes = useStyles();
-  const loggedIn = true;
+  const loggedIn = false;
   const location = useLocation();
   let hideBtn = true;
 

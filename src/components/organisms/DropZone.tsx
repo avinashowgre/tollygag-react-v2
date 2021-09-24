@@ -8,10 +8,11 @@ import { renderMedia } from "../../common/image.utils";
 type Props = {
   imgUrl?: string;
   orderIndex: string;
+  setPost: (img: any) => void;
 };
 
 export function DropZone(props: Props) {
-  const { imgUrl, orderIndex } = props;
+  const { imgUrl, orderIndex, setPost } = props;
 
   const classes = useStyles();
 
@@ -60,6 +61,9 @@ export function DropZone(props: Props) {
     clearMemeBtn.style.display = "block";
 
     renderMedia(canvas, blob);
+
+    // Fetch the rendered media from canvas element
+    setPost(canvas.toDataURL());
   }
 
   const onDrop = useCallback((acceptedFiles) => {

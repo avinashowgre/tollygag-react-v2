@@ -19,6 +19,7 @@ const CreatePost = () => {
   const [dialogTitle, setDialogTitle] = useState<ReactNode>("");
   const [dialogContent, setDialogContent] = useState<ReactNode>();
   const [imgUrl, setImgUrl] = useState<string>("");
+  const [post, setPost] = useState<any>();
   const classes = useStyles();
 
   function getImgFlipTemplates() {
@@ -27,6 +28,11 @@ const CreatePost = () => {
       setDialogTitle("Custom Available Meme templates");
       setDialogContent(<CustomImageGallery itemData={data.memes} />);
     });
+  }
+
+  function fetchRenderedImage(img: any) {
+    console.log(img);
+    setPost(img);
   }
 
   return (
@@ -52,7 +58,7 @@ const CreatePost = () => {
             className={classes.dropZoneArea}
             justifyContent="center"
           >
-            <MemeLayout imgUrl={imgUrl} />
+            <MemeLayout imgUrl={imgUrl} setPost={fetchRenderedImage} />
           </Grid>
         </Grid>
       </Grid>
