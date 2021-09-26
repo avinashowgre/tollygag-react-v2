@@ -1,11 +1,17 @@
-const dotenv = require("dotenv");
+require("dotenv").config();
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const { verify } = require("jsonwebtoken");
 const { compare, hash } = require("bcryptjs");
 const { fakeDB } = require("./server/fakeDB");
-const { createAccessToken, createRefreshToken } = require("./server/tokens");
+const {
+  createAccessToken,
+  createRefreshToken,
+  sendAccessToken,
+  sendRefreshToken,
+} = require("./server/tokens");
+const { isAuth } = require("./server/isAuth");
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -49,8 +55,10 @@ app.post("/signup", async (req, res) => {
 
 app.post("/signin", async (req, res) => {
   const { email, password } = req.body;
+
   try {
     const user = fakeDB.find((user) => user.email === email);
+
     if (!user) {
       throw new Error("User does not exist");
     }
@@ -61,8 +69,51 @@ app.post("/signin", async (req, res) => {
     }
     const accessToken = createAccessToken(user.id);
     const refreshToken = createRefreshToken(user.id);
-    res.send({ message: "User created" });
+
+    user.refreshToken = refreshToken;
+
+    sendRefreshToken(res, refreshToken);
+    sendAccessToken(res, req, accessToken);
   } catch (err) {
     res.send({ error: `${err.message}` });
   }
+});
+
+app.post("/signout", (_req, res) => {
+  res.clearCookie("refreshToken");
+  res.send({ message: "Logged out" });
+});
+
+app.post("/protected", async (req, res) => {
+  try {
+    const userId = isAuth(req);
+    if (userId !== null) {
+      res.send({
+        data: " This is protected data",
+      });
+    }
+  } catch (err) {
+    res.send({
+      error: `${err.message}`,
+    });
+  }
+});
+
+app.post("/refresh_token", (req, res) => {
+  const token = req.cookies.refreshToken;
+  if (!token) {
+    res.send({
+      accessToken: "",
+    });
+  }
+  let payload = null;
+  try {
+    payload = verify(token, process.env.REFRESH_TOKEN_SECRET);
+  } catch (err) {
+    res.send({
+      error: `${err.message}`,
+    });
+  }
+
+  const user = fakeDB.find((user) => user.id === payload.userId);
 });
