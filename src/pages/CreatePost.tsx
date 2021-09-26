@@ -16,8 +16,10 @@ import { getMemes } from "../api/get-memes.api";
 
 const CreatePost = () => {
   const [open, setOpen] = useState<boolean>(false);
-  const [dialogTitle, setDialogTitle] = useState<string>("");
+  const [dialogTitle, setDialogTitle] = useState<ReactNode>("");
   const [dialogContent, setDialogContent] = useState<ReactNode>();
+  const [imgUrl, setImgUrl] = useState<string>("");
+  const [post, setPost] = useState<any>();
   const classes = useStyles();
 
   function getImgFlipTemplates() {
@@ -28,9 +30,14 @@ const CreatePost = () => {
     });
   }
 
+  function fetchRenderedImage(img: any) {
+    console.log(img);
+    setPost(img);
+  }
+
   return (
     <Grid container className={classes.createPostContainer} spacing={2}>
-      <Grid item lg={8} md={8} sm={8}>
+      <Grid item lg={6} md={6}>
         <Grid container direction="column">
           <Grid item lg={12}>
             <TextField
@@ -38,17 +45,24 @@ const CreatePost = () => {
               fullWidth
               placeholder="Paste URL"
               size={"small"}
-              value={""}
               variant="outlined"
+              value={""}
+              onChange={(evt) => {
+                setImgUrl(evt.target.value);
+              }}
             />
           </Grid>
           <Separator text={"( OR )"} />
-          <Grid container className={classes.dropZoneArea}>
-            <MemeLayout />
+          <Grid
+            container
+            className={classes.dropZoneArea}
+            justifyContent="center"
+          >
+            <MemeLayout imgUrl={imgUrl} setPost={fetchRenderedImage} />
           </Grid>
         </Grid>
       </Grid>
-      <Grid item lg={4} md={4} sm={4}>
+      <Grid item lg={6} md={6}>
         <Grid container justifyContent={"space-around"}>
           <Grid item>
             <Button
@@ -73,11 +87,6 @@ const CreatePost = () => {
           justifyContent={"center"}
           spacing={2}
         >
-          <Grid className={classes.actionGrpBtn} item>
-            <Button color={"primary"} variant={"contained"} fullWidth>
-              Build custom template
-            </Button>
-          </Grid>
           <Grid className={classes.actionGrpBtn} item>
             <Button
               color={"primary"}
@@ -117,14 +126,11 @@ const useStyles = makeStyles(() => {
     },
     createPostContainer: {
       backgroundColor: "white",
-      height: "100vh",
     },
     dropZoneArea: {
-      border: "2px dotted #3f51b5",
       borderRadius: 5,
       flexGrow: 1,
       minHeight: "calc(80vh - 20px)",
-      maxHeight: "calc(80vh - 20px)",
       padding: 10,
       position: "relative",
       textAlign: "center",
