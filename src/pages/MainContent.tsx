@@ -44,9 +44,6 @@ export const MainContent = (props: MainContentProps) => {
               path="/create/post"
               component={CreatePostWithRouter}
             />
-            {/* <Route exact path="/create/post">
-              <CreatePostWithRouter />
-            </Route> */}
             <Route exact path="/">
               <HomeWithRouter />
             </Route>
