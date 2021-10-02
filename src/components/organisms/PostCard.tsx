@@ -5,13 +5,9 @@ import Badge from "@material-ui/core/Badge";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardActionArea from "@material-ui/core/CardActionArea";
-import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
-import Fade from "@material-ui/core/Fade";
 import IconButton from "@material-ui/core/IconButton";
 import Link from "@material-ui/core/Link";
-import Tooltip from "@material-ui/core/Tooltip";
-import Typography from "@material-ui/core/Typography";
 
 import CommentIcon from "@material-ui/icons/Comment";
 import ReportIcon from "@material-ui/icons/Report";
@@ -19,6 +15,7 @@ import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 
 import { PostTO } from "../../api/api.types";
+
 import { SocialMediaShare } from "../atoms/SocialMediaShare";
 
 type GagCardProps = {
@@ -90,19 +87,6 @@ export function PostCard(props: GagCardProps) {
   return (
     <Card className={classes.root}>
       <CardActionArea onClick={() => handleOnClick(postGag.id)}>
-        <CardContent>
-          <Tooltip
-            title={postGag.title}
-            TransitionComponent={Fade}
-            TransitionProps={{ timeout: 600 }}
-          >
-            <Typography variant="h6" noWrap>
-              <Link underline={"none"}>
-                <strong>{postGag.title}</strong>
-              </Link>
-            </Typography>
-          </Tooltip>
-        </CardContent>
         <div className={classes.cardMedia}>
           <CardMedia
             component="img"

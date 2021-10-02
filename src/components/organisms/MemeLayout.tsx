@@ -23,7 +23,9 @@ const useStyles = makeStyles(() => {
   return {
     flexItem: {
       minWidth: "80%",
+      minHeight: "calc(80vh - 20px)",
       margin: 1,
+      position: "relative",
     },
   };
 });

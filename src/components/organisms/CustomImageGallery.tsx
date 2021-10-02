@@ -20,13 +20,16 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       flexWrap: "wrap",
       justifyContent: "space-around",
-      overflow: "hidden",
+      overflow: "auto",
       backgroundColor: theme.palette.background.paper,
+      maxHeight: 490,
     },
     imageItem: {
+      border: "1px solid black",
       transition: "0.3s",
       "&:hover": {
-        boxShadow: "0 8px 16px 0 rgba(0,0,0,0.2)",
+        boxShadow:
+          "0 4px 10px 0 rgb(0 0 0 / 20%), 0 4px 20px 0 rgb(0 0 0 / 19%)",
         cursor: "pointer",
       },
     },

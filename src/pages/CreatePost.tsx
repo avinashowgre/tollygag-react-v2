@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -6,33 +6,68 @@ import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
+import Tooltip from "@material-ui/core/Tooltip";
 
-import { CustomDialog } from "../components/organisms/CustomDialog";
+import { Collapsible } from "../components/atoms/Collapsible";
 import { CustomImageGallery } from "../components/organisms/CustomImageGallery";
 import { MemeLayout } from "../components/organisms/MemeLayout";
 import { Separator } from "../components/atoms/Separator";
+import {
+  ToastNotification,
+  ToastProps,
+} from "../components/atoms/ToastNotification";
 
 import { getMemes } from "../api/get-memes.api";
+import { MemeTO } from "../api/api.types";
 
 const CreatePost = () => {
-  const [open, setOpen] = useState<boolean>(false);
-  const [dialogTitle, setDialogTitle] = useState<ReactNode>("");
-  const [dialogContent, setDialogContent] = useState<ReactNode>();
-  const [imgUrl, setImgUrl] = useState<string>("");
+  const [imgUrl, setImgUrl] = useState<any>();
   const [post, setPost] = useState<any>();
+  const [memes, setMemes] = useState<MemeTO[]>([]);
+  const [toastProps, setToastProps] = useState<
+    Omit<ToastProps, "onCloseToast">
+  >({
+    severity: "info",
+    open: false,
+    toastMessage: "",
+  });
+
   const classes = useStyles();
 
   function getImgFlipTemplates() {
     getMemes().then((data) => {
-      setOpen(true);
-      setDialogTitle("Custom Available Meme templates");
-      setDialogContent(<CustomImageGallery itemData={data.memes} />);
+      setMemes(data.memes);
     });
   }
 
+  function handleClose() {
+    setToastProps({ ...toastProps, open: false });
+  }
+
+  function fetchImageFromUrl(url: string) {
+    fetch(url)
+      .then((res) => res.blob()) // Gets the response and returns it as a blob
+      .then((blob) => {
+        setImgUrl(blob);
+        setToastProps({
+          severity: "success",
+          open: true,
+          toastMessage: "Fetched Image!",
+        });
+        setPost(blob);
+      })
+      .catch((err) => {
+        setToastProps({
+          severity: "error",
+          open: true,
+          toastMessage: "Failed to fetch image",
+        });
+      });
+  }
+
   function fetchRenderedImage(img: any) {
-    console.log(img);
     setPost(img);
+    console.log(img);
   }
 
   return (
@@ -46,94 +81,63 @@ const CreatePost = () => {
               placeholder="Paste URL"
               size={"small"}
               variant="outlined"
-              value={""}
               onChange={(evt) => {
-                setImgUrl(evt.target.value);
+                fetchImageFromUrl(evt.target.value);
               }}
             />
           </Grid>
           <Separator text={"( OR )"} />
-          <Grid
-            container
-            className={classes.dropZoneArea}
-            justifyContent="center"
-          >
-            <MemeLayout imgUrl={imgUrl} setPost={fetchRenderedImage} />
+          <Grid container direction="column" className={classes.postArea}>
+            <MemeLayout img={imgUrl} setPost={fetchRenderedImage} />
           </Grid>
         </Grid>
       </Grid>
       <Grid item lg={6} md={6}>
-        <Grid container justifyContent={"space-around"}>
-          <Grid item>
-            <Button
-              color={"primary"}
-              onClick={getImgFlipTemplates}
-              variant={"contained"}
-            >
-              Save template
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button color={"primary"} variant={"contained"}>
-              Create Post
-            </Button>
-          </Grid>
+        <Grid container>
+          <Collapsible title={"Use Custom Memes"} onClick={getImgFlipTemplates}>
+            <CustomImageGallery itemData={memes} />
+          </Collapsible>
         </Grid>
-        <Grid
-          alignItems={"center"}
-          container
-          className={classes.createPostActionsContainer}
-          direction={"column"}
-          justifyContent={"center"}
-          spacing={2}
-        >
-          <Grid className={classes.actionGrpBtn} item>
-            <Button
-              color={"primary"}
-              onClick={getImgFlipTemplates}
-              variant={"contained"}
-              fullWidth
-            >
-              Use custom memes
-            </Button>
+        <Grid alignItems={"center"} container spacing={2}>
+          <Grid item>
+            <Tooltip title="Feature work in progress">
+              <span>
+                <Button
+                  color={"primary"}
+                  disabled
+                  fullWidth
+                  variant={"contained"}
+                >
+                  Add caption
+                </Button>
+              </span>
+            </Tooltip>
           </Grid>
-
-          <Grid className={classes.actionGrpBtn} item>
+          <Grid item>
             <Button color={"primary"} variant={"contained"} fullWidth>
-              Add caption
+              Create post
             </Button>
           </Grid>
         </Grid>
-
-        <CustomDialog
-          open={open}
-          setOpen={setOpen}
-          title={dialogTitle}
-          content={dialogContent}
-        />
       </Grid>
+      <ToastNotification {...toastProps} onCloseToast={handleClose} />
     </Grid>
   );
 };
 
 const useStyles = makeStyles(() => {
   return {
-    actionGrpBtn: {
-      minWidth: 240,
-    },
-    createPostActionsContainer: {
-      height: "80vh",
-    },
     createPostContainer: {
       backgroundColor: "white",
     },
     dropZoneArea: {
       borderRadius: 5,
       flexGrow: 1,
-      minHeight: "calc(80vh - 20px)",
-      padding: 10,
       position: "relative",
       textAlign: "center",
+    },
+    postArea: {
+      padding: 10,
     },
   };
 });

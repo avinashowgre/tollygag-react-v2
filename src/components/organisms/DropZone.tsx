@@ -6,13 +6,13 @@ import ClearIcon from "@material-ui/icons/Clear";
 import { renderMedia } from "../../common/image.utils";
 
 type Props = {
-  imgUrl?: string;
+  img?: Blob;
   orderIndex: string;
   setPost: (img: any) => void;
 };
 
 export function DropZone(props: Props) {
-  const { imgUrl, orderIndex, setPost } = props;
+  const { img, orderIndex, setPost } = props;
 
   const classes = useStyles();
 
@@ -20,12 +20,8 @@ export function DropZone(props: Props) {
   const overlayElemId = `overlay-elem-${orderIndex}`;
   const removeBtnId = `remove-${orderIndex}`;
 
-  if (imgUrl) {
-    fetch(imgUrl)
-      .then((res) => res.blob()) // Gets the response and returns it as a blob
-      .then((blob) => {
-        displayMeme(blob);
-      });
+  if (img) {
+    displayMeme(img);
   }
 
   function clearMeme() {
@@ -61,9 +57,6 @@ export function DropZone(props: Props) {
     clearMemeBtn.style.display = "block";
 
     renderMedia(canvas, blob);
-
-    // Fetch the rendered media from canvas element
-    setPost(canvas.toDataURL());
   }
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -147,7 +140,7 @@ const useStyles = makeStyles(() => {
       width: "100%",
       height: "100%",
       lineHeight: "100%",
-      position: "relative",
+      position: "absolute",
       textAlign: "center",
     },
   };
