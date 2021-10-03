@@ -4,7 +4,7 @@ import { render } from "react-dom";
 import { Provider } from "react-redux";
 import { appStore } from "./slices/app-store";
 
-import { HashRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
 import "./index.css";
 
@@ -30,14 +30,14 @@ export const App = () => {
     <div className={classes.root}>
       <Provider store={appStore}>
         <ThemeProvider theme={theme}>
-          <HashRouter>
+          <BrowserRouter>
             <CssBaseline />
             <Header handleDrawerToggle={handleDrawerToggle} />
             <MainContent
               handleDrawerToggle={handleDrawerToggle}
               mobileOpen={mobileOpen}
             />
-          </HashRouter>
+          </BrowserRouter>
         </ThemeProvider>
       </Provider>
     </div>
