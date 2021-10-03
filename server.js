@@ -27,13 +27,24 @@ app.use(
   })
 );
 
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
+
 // Needed to be able to read body data
 app.use(express.json()); // to support JSON encoded bodies
 app.use(express.urlencoded({ extended: true })); // support url encoded bodies
 app.use(express.static(path.resolve(__dirname, "./build")));
 
 // This displays message that the server running and listening to specified port
-app.listen(port, () => console.log(`Listening on port ${port}`));
+app.listen(process.env.PORT || 8080, () =>
+  console.log(`Listening on port ${process.env.PORT || 8080}!`)
+);
 
 app.get("/", (req, res) => {
   res.sendFile(path.resolve(__dirname, "./build", "index.html"));
