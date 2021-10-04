@@ -12,6 +12,7 @@ export function ProtectedRoute(props: Props) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
   return (
     <Route
+      exact
       path={path}
       render={(props) =>
         isAuthenticated ? (
