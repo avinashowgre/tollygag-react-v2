@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@google-cloud/storage": "^5.14.3",
+    "@google-cloud/storage": "^5.14.4",
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.60",
@@ -28,6 +28,8 @@
     "express": "^4.17.1",
     "immer": "7.0.9",
     "jsonwebtoken": "^8.5.1",
+    "multer": "^1.4.3",
+    "mutter": "^1.0.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-dropzone": "^11.4.0",
@@ -45,7 +47,8 @@
     "start:dev": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "server": "nodemon src/server.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -74,6 +77,5 @@
     "msw": "^0.21.2",
     "nodemon": "^2.0.13",
     "ts-node": "^10.2.1"
-  },
-  "proxy": "http://localhost:5000"
+  }
 }

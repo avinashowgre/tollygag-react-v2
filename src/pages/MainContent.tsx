@@ -10,6 +10,8 @@ import { NotFoundPage } from "./NotFoundPage";
 import { LeftDrawer } from "../components/organisms/LeftDrawer";
 import { CreatePostWithRouter } from "./CreatePost";
 import { ProtectedRoute } from "../components/organisms/ProtectedRoute";
+import TestStorage from "./TestStorage";
+
 
 type MainContentProps = {
   handleDrawerToggle: () => void;
@@ -39,6 +41,9 @@ export const MainContent = (props: MainContentProps) => {
           <Switch>
             <Route path="/gag/:id">
               <PostDetailsWithRouter />
+            </Route>
+            <Route exact path="/teststorage/">
+              <TestStorage />
             </Route>
             <ProtectedRoute
               path="/create/post"
