@@ -5,27 +5,31 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const { verify } = require("jsonwebtoken");
 const { compare, hash } = require("bcryptjs");
-const { fakeDB } = require("./config/fakeDB");
+const { fakeDB } = require("../config/fakeDB");
 const {
   createAccessToken,
   createRefreshToken,
   sendAccessToken,
   sendRefreshToken,
-} = require("./config/tokens");
-const { isAuth } = require("./config/isAuth");
+} = require("../config/tokens");
+const { isAuth } = require("../config/isAuth");
 
 const app = express();
 const port = process.env.PORT || 5000;
 
 // use express middleware for easier cookie handling
-app.use(cookieParser());
+// app.use(cookieParser());
 
-app.use(
-  cors({
-    credentials: true,
-    origin: "https://localhost:3000",
-  })
-);
+// app.use(
+//   cors({
+//     credentials: true,
+//     origin: "https://localhost:3000",
+//   })
+// );
+
+// Needed to be able to read body data
+app.use(express.json()); // to support JSON encoded bodies
+app.use(express.urlencoded({ extended: true })); // support url encoded bodies
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -36,19 +40,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-// Needed to be able to read body data
-app.use(express.json()); // to support JSON encoded bodies
-app.use(express.urlencoded({ extended: true })); // support url encoded bodies
-app.use(express.static(path.resolve(__dirname, "./build")));
-
-// This displays message that the server running and listening to specified port
-app.listen(process.env.PORT || 8080, () =>
-  console.log(`Listening on port ${process.env.PORT || 8080}!`)
-);
-
-app.get("/", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "./build", "index.html"));
-});
+app.use(express.static(path.resolve(__dirname, "../build")));
 
 // create a GET route
 app.get("/express_backend", (req, res) => {
@@ -143,3 +135,12 @@ app.post("/api/refresh_token", (req, res) => {
   sendRefreshToken(res, refreshtoken);
   return res.send({ accesstoken });
 });
+
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../build", "index.html"));
+});
+
+// This displays message that the server running and listening to specified port
+app.listen(process.env.PORT || 8080, () =>
+  console.log(`Listening on port ${process.env.PORT || 8080}!`)
+);
