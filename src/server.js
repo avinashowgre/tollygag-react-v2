@@ -13,6 +13,7 @@ const {
   sendRefreshToken,
 } = require("../config/tokens");
 const { isAuth } = require("../config/isAuth");
+const { Storage } = require("@google-cloud/storage");
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -134,6 +135,25 @@ app.post("/api/refresh_token", (req, res) => {
   // All good to go, send new refreshtoken and accesstoken
   sendRefreshToken(res, refreshtoken);
   return res.send({ accesstoken });
+});
+
+app.get("/upload_google_storage", async (req, res) => {
+  filePath = "./src/assets/img1.jpg";
+  const gc = new Storage({
+    keyFilename: path.join(
+      __dirname,
+      "./silicon-data-327202-6bfafd08e5d4.json"
+    ),
+    projectId: "silicon-data-327202",
+  });
+
+  await gc.bucket("tgag").upload(filePath, {
+    destination: "test-image",
+  });
+
+  res.send({
+    message: `${filePath} uploaded to tgag`,
+  });
 });
 
 app.get("*", (req, res) => {
