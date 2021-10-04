@@ -40,10 +40,13 @@ export const MainContent = (props: MainContentProps) => {
             <Route exact path="/gag/:id">
               <PostDetailsWithRouter />
             </Route>
-            <ProtectedRoute
+            {/* <ProtectedRoute
               path="/create/post"
               component={CreatePostWithRouter}
-            />
+            /> */}
+            <Route exact path="/createpost">
+              <CreatePostWithRouter />
+            </Route>
             <Route exact path="/">
               <HomeWithRouter />
             </Route>
