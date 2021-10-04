@@ -8,7 +8,7 @@ import { HomeWithRouter } from "./Home";
 import { PostDetailsWithRouter } from "./PostDetails";
 import { NotFoundPage } from "./NotFoundPage";
 import { LeftDrawer } from "../components/organisms/LeftDrawer";
-import { CreatePost } from "./CreatePost";
+import { CreatePostWithRouter } from "./CreatePost";
 import { ProtectedRoute } from "../components/organisms/ProtectedRoute";
 
 type MainContentProps = {
@@ -40,13 +40,10 @@ export const MainContent = (props: MainContentProps) => {
             <Route path="/gag/:id">
               <PostDetailsWithRouter />
             </Route>
-            {/* <ProtectedRoute
+            <ProtectedRoute
               path="/create/post"
               component={CreatePostWithRouter}
-            /> */}
-            <Route path="/create/post">
-              <CreatePost />
-            </Route>
+            />
             <Route exact path="/">
               <HomeWithRouter />
             </Route>

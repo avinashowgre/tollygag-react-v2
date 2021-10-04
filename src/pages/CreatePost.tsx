@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import { withRouter } from "react-router";
+
 import { makeStyles } from "@material-ui/core/styles";
 
 import Button from "@material-ui/core/Button";
@@ -19,7 +21,7 @@ import {
 import { getMemes } from "../api/get-memes.api";
 import { MemeTO } from "../api/api.types";
 
-export function CreatePost() {
+function CreatePost() {
   const [imgUrl, setImgUrl] = useState<any>();
   const [post, setPost] = useState<any>();
   const [memes, setMemes] = useState<MemeTO[]>([]);
@@ -140,3 +142,5 @@ const useStyles = makeStyles(() => {
     },
   };
 });
+
+export const CreatePostWithRouter = withRouter(CreatePost);
