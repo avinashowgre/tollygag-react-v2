@@ -11,16 +11,12 @@ export function ProtectedRoute(props: Props) {
   // eslint-disable-next-line
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
   return (
-    <Route
-      exact
-      path={path}
-      render={(props) =>
-        isAuthenticated ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to={{ pathname: "/", state: { from: props.location } }} />
-        )
-      }
-    />
+    <Route exact path={path}>
+      {isAuthenticated ? (
+        <Component {...props} />
+      ) : (
+        <Redirect to={{ pathname: "/" }} />
+      )}
+    </Route>
   );
 }
