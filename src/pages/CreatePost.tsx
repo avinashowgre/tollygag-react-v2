@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { withRouter } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -20,7 +19,7 @@ import {
 import { getMemes } from "../api/get-memes.api";
 import { MemeTO } from "../api/api.types";
 
-const CreatePost = () => {
+export function CreatePost() {
   const [imgUrl, setImgUrl] = useState<any>();
   const [post, setPost] = useState<any>();
   const [memes, setMemes] = useState<MemeTO[]>([]);
@@ -123,7 +122,7 @@ const CreatePost = () => {
       <ToastNotification {...toastProps} onCloseToast={handleClose} />
     </Grid>
   );
-};
+}
 
 const useStyles = makeStyles(() => {
   return {
@@ -141,5 +140,3 @@ const useStyles = makeStyles(() => {
     },
   };
 });
-
-export const CreatePostWithRouter = withRouter(CreatePost);
