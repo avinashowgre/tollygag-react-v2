@@ -14,6 +14,14 @@ const {
 } = require("../config/tokens");
 const { isAuth } = require("../config/isAuth");
 
+// Imports the Google Cloud client library
+const { Datastore } = require("@google-cloud/datastore");
+const { Storage } = require("@google-cloud/storage");
+
+// Creates a client
+const datastore = new Datastore();
+const gc = new Storage();
+
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -134,6 +142,26 @@ app.post("/api/refresh_token", (req, res) => {
   // All good to go, send new refreshtoken and accesstoken
   sendRefreshToken(res, refreshtoken);
   return res.send({ accesstoken });
+});
+
+app.get("/sample", async (req, res) => {
+  filePath = "./src/assets/img1.jpg";
+
+  await gc.bucket("tgag").upload(filePath, {
+    destination: "test-image",
+  });
+
+  res.send({
+    message: `${filePath} uploaded to tgag`,
+  });
+});
+
+app.get("/post", async (req, res) => {
+  const query = datastore.createQuery("post");
+
+  const [result] = await datastore.runQuery(query);
+
+  res.send({ data: result });
 });
 
 app.get("*", (req, res) => {
