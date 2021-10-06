@@ -13,7 +13,6 @@ const {
   sendRefreshToken,
 } = require("../config/tokens");
 const { isAuth } = require("../config/isAuth");
-const { Storage } = require("@google-cloud/storage");
 
 const gcsMiddlewares = require("../config/middleware/google-cloud-storage");
 
