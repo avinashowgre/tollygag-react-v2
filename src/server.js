@@ -13,6 +13,18 @@ const {
   sendRefreshToken,
 } = require("../config/tokens");
 const { isAuth } = require("../config/isAuth");
+const { Storage } = require("@google-cloud/storage");
+
+const gcsMiddlewares = require("../config/middleware/google-cloud-storage");
+
+const Multer = require("multer");
+
+const multer = Multer({
+  storage: Multer.MemoryStorage,
+  limits: {
+    fileSize: 10 * 1024 * 1024, // Maximum file size is 10MB
+  },
+});
 
 // Imports the Google Cloud client library
 const { Datastore } = require("@google-cloud/datastore");
@@ -144,8 +156,12 @@ app.post("/api/refresh_token", (req, res) => {
   return res.send({ accesstoken });
 });
 
-app.get("/sample", async (req, res) => {
+app.get("/upload_google_storage", async (req, res) => {
   filePath = "./src/assets/img1.jpg";
+  const gc = new Storage({
+    keyFilename: path.join(__dirname, "../config/credentials.json"),
+    projectId: "silicon-data-327202",
+  });
 
   await gc.bucket("tgag").upload(filePath, {
     destination: "test-image",
@@ -155,6 +171,20 @@ app.get("/sample", async (req, res) => {
     message: `${filePath} uploaded to tgag`,
   });
 });
+
+app.post(
+  "/upload",
+  [multer.single("file"), gcsMiddlewares.sendUploadToGCS],
+  (req, res, next) => {
+    if (req.file && req.file.gcsUrl) {
+      return res.send({
+        data: req.file.gcsUrl,
+      });
+    }
+
+    return res.status(500).send("Unable to upload");
+  }
+);
 
 app.get("/post", async (req, res) => {
   const query = datastore.createQuery("post");
