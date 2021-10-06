@@ -6,5 +6,5 @@ type GetPostParams = {
 };
 
 export function getPost(params: GetPostParams) {
-  return wretchGet<PostTO[]>({ params, route: "posts" });
+  return wretchGet<PostTO[]>({ params, route: "post" });
 }

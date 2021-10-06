@@ -26,6 +26,14 @@ const multer = Multer({
   },
 });
 
+// Imports the Google Cloud client library
+const { Datastore } = require("@google-cloud/datastore");
+const { Storage } = require("@google-cloud/storage");
+
+// Creates a client
+const datastore = new Datastore();
+const gc = new Storage();
+
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -177,6 +185,14 @@ app.post(
     return res.status(500).send("Unable to upload");
   }
 );
+
+app.get("/post", async (req, res) => {
+  const query = datastore.createQuery("post");
+
+  const [result] = await datastore.runQuery(query);
+
+  res.send({ data: result });
+});
 
 app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../build", "index.html"));

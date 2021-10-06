@@ -43,7 +43,7 @@ const PostDetails = (props: PostProps) => {
 
   return (
     <Grid container justify={"center"} spacing={2}>
-      {content}
+      {post}
     </Grid>
   );
 };
