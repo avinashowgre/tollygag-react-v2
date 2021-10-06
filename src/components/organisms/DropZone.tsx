@@ -69,11 +69,9 @@ export function DropZone(props: Props) {
     var fd = new FormData();
     fd.append("file", file);
 
-    fetch("http://localhost:8080/upload", { method: "post", body: fd }).then(
-      (data) => {
-        console.log(data);
-      }
-    );
+    fetch("/upload", { method: "post", body: fd }).then((data) => {
+      console.log(data);
+    });
 
     clearMeme();
     displayMeme(blob);
