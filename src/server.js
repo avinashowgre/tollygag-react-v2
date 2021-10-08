@@ -31,20 +31,8 @@ const { Storage } = require("@google-cloud/storage");
 
 // Creates a client
 const datastore = new Datastore();
-const gc = new Storage();
 
 const app = express();
-const port = process.env.PORT || 5000;
-
-// use express middleware for easier cookie handling
-// app.use(cookieParser());
-
-// app.use(
-//   cors({
-//     credentials: true,
-//     origin: "https://localhost:3000",
-//   })
-// );
 
 // Needed to be able to read body data
 app.use(express.json()); // to support JSON encoded bodies
