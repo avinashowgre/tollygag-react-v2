@@ -58,7 +58,7 @@ export function LeftDrawer(props: LeftDrawerProps) {
   return (
     <nav className={classes.drawer} aria-label="mailbox folders">
       {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-      <Hidden smUp implementation="css">
+      <Hidden only={["md", "lg"]} implementation="css">
         <Drawer
           container={container}
           variant="temporary"
@@ -74,7 +74,7 @@ export function LeftDrawer(props: LeftDrawerProps) {
           {drawer}
         </Drawer>
       </Hidden>
-      <Hidden xsDown implementation="css">
+      <Hidden only={["sm", "xs"]} implementation="css">
         <Drawer
           classes={{
             paper: classes.drawerPaper,
@@ -93,6 +93,10 @@ const useStyles = makeStyles((theme: any) => {
   return {
     drawer: {
       [theme.breakpoints.up("sm")]: {
+        width: drawerWidth,
+        flexShrink: 0,
+      },
+      [theme.breakpoints.up("xs")]: {
         width: drawerWidth,
         flexShrink: 0,
       },

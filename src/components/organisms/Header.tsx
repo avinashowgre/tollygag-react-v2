@@ -33,7 +33,7 @@ export const Header = (props: HeaderProps) => {
   return (
     <AppBar position="fixed" className={classes.root}>
       <Toolbar>
-        <Hidden smUp implementation="css">
+        <Hidden only={["md", "lg"]} implementation="css">
           <IconButton
             color="inherit"
             aria-label="open drawer"

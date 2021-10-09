@@ -62,7 +62,7 @@ const Home = (props: HomeProps) => {
 
   if (posts && !loading) {
     content = posts.map((post, index) => (
-      <Grid item key={index} xs={12} sm={6} md={4}>
+      <Grid item key={index} xs={12} sm={6} md={6} lg={4}>
         <PostCard
           post={post}
           handleOnClick={viewPost}

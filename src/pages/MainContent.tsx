@@ -12,7 +12,6 @@ import { CreatePostWithRouter } from "./CreatePost";
 import { ProtectedRoute } from "../components/organisms/ProtectedRoute";
 import TestStorage from "./TestStorage";
 
-
 type MainContentProps = {
   handleDrawerToggle: () => void;
   mobileOpen: boolean;
@@ -30,14 +29,14 @@ export const MainContent = (props: MainContentProps) => {
       <div className={classes.toolbar} />
       <Grid container>
         {!isDrawerHidden && (
-          <Grid item md={2} lg={2}>
+          <Grid item md={3} lg={2}>
             <LeftDrawer
               handleDrawerToggle={handleDrawerToggle}
               mobileOpen={mobileOpen}
             />
           </Grid>
         )}
-        <Grid item className={classes.cardContent} xs={12} md>
+        <Grid item className={classes.cardContent} md={9} lg={10} xs={12}>
           <Switch>
             <Route path="/gag/:id">
               <PostDetailsWithRouter />
