@@ -167,9 +167,6 @@ const useStyles = makeStyles((theme) => ({
   imgMedia: {
     position: "absolute",
     top: 0,
-    [theme.breakpoints.down("md")]: {
-      position: "relative",
-    },
   },
   root: {
     marginBottom: 20,
