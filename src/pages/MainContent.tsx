@@ -26,7 +26,7 @@ export const MainContent = (props: MainContentProps) => {
   return (
     <main className={classes.content}>
       <div className={classes.toolbar} />
-      <Grid container>
+      <Grid container justifyContent="center">
         {!isDrawerHidden && (
           <Grid item md={3} lg={2}>
             <LeftDrawer
