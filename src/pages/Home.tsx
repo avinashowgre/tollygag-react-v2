@@ -41,7 +41,6 @@ const Home = (props: HomeProps) => {
   }
 
   function expandPost(post: PostTO) {
-    console.log(post);
     setOpen(true);
     setDialogTitle(post.title);
     setDialogContent(

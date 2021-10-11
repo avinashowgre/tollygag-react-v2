@@ -19,3 +19,18 @@ code {
 .gif_player {
   width: 100% !important;
 }
+
+::-webkit-scrollbar {
+  width: 0.5em;
+}
+
+::-webkit-scrollbar-thumb {
+  background: black;
+  border-radius: 100vw;
+}
+
+::-webkit-scrollbar-track {
+  background: white;
+  border-radius: 100vw;
+  margin-block: 0.5em;
+}

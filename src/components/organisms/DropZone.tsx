@@ -66,15 +66,16 @@ export function DropZone(props: Props) {
       { type: file.type } // If the type is unknown, default is empty string.
     );
 
-    var fd = new FormData();
-    fd.append("file", file);
+    // var fd = new FormData();
+    // fd.append("file", file);
 
-    fetch("/upload", { method: "post", body: fd }).then((data) => {
-      console.log(data);
-    });
+    // fetch("/upload", { method: "post", body: fd }).then((data) => {
+    //   console.log(data);
+    // });
 
     clearMeme();
     displayMeme(blob);
+    setPost(blob);
     // eslint-disable-next-line
   }, []);
 

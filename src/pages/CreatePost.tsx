@@ -23,7 +23,7 @@ import { MemeTO } from "../api/api.types";
 
 function CreatePost() {
   const [imgUrl, setImgUrl] = useState<any>();
-  const [post, setPost] = useState<any>();
+  const [post, setPost] = useState<Blob>();
   const [memes, setMemes] = useState<MemeTO[]>([]);
   const [toastProps, setToastProps] = useState<
     Omit<ToastProps, "onCloseToast">
@@ -66,9 +66,17 @@ function CreatePost() {
       });
   }
 
-  function fetchRenderedImage(img: any) {
-    setPost(img);
-    console.log(img);
+  function createPost() {
+    if (post) {
+      var fd = new FormData();
+      fd.append("file", post);
+      fetch("http://localhost:8080/post/create", {
+        method: "post",
+        body: fd,
+      }).then((data) => {
+        console.log(data);
+      });
+    }
   }
 
   return (
@@ -89,7 +97,7 @@ function CreatePost() {
           </Grid>
           <Separator text={"( OR )"} />
           <Grid container direction="column" className={classes.postArea}>
-            <MemeLayout img={imgUrl} setPost={fetchRenderedImage} />
+            <MemeLayout img={imgUrl} setPost={setPost} />
           </Grid>
         </Grid>
       </Grid>
@@ -115,7 +123,12 @@ function CreatePost() {
             </Tooltip>
           </Grid>
           <Grid item>
-            <Button color={"primary"} variant={"contained"} fullWidth>
+            <Button
+              color={"primary"}
+              variant={"contained"}
+              fullWidth
+              onClick={createPost}
+            >
               Create post
             </Button>
           </Grid>
