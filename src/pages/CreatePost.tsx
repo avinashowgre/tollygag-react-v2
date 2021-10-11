@@ -70,7 +70,10 @@ function CreatePost() {
     if (post) {
       var fd = new FormData();
       fd.append("file", post);
-      fetch("/upload", { method: "post", body: fd }).then((data) => {
+      fetch("http://localhost:8080/post/create", {
+        method: "post",
+        body: fd,
+      }).then((data) => {
         console.log(data);
       });
     }
