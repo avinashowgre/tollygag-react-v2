@@ -11,16 +11,16 @@ import {
 type ModalProps = DialogProps & {
   children: ReactNode;
   modalActions?: ReactNode;
-  title: ReactNode;
+  title?: ReactNode;
 };
 
 export function Modal(props: ModalProps) {
   const { children, title, modalActions, ...otherProps } = props;
   return (
     <Dialog {...otherProps}>
-      <DialogTitle id="max-width-dialog-title">{title}</DialogTitle>
+      {title && <DialogTitle id="max-width-dialog-title">{title}</DialogTitle>}
       <DialogContent>{children}</DialogContent>
-      <DialogActions>{modalActions}</DialogActions>
+      {modalActions && <DialogActions>{modalActions}</DialogActions>}
     </Dialog>
   );
 }
