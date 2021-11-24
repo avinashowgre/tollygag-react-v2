@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { render } from "react-dom";
 
+import { QueryClient, QueryClientProvider } from "react-query";
+
 import { Provider } from "react-redux";
 import { appStore } from "./slices/app-store";
 
@@ -17,6 +19,8 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { hrefPrehashContains } from "./common/href-prehash-contains";
 import { ThemeProvider } from "@material-ui/core/styles";
 
+const queryClient = new QueryClient();
+
 export const App = () => {
   const classes = useStyles();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -29,16 +33,18 @@ export const App = () => {
   return (
     <div className={classes.root}>
       <Provider store={appStore}>
-        <ThemeProvider theme={theme}>
-          <BrowserRouter>
-            <CssBaseline />
-            <Header handleDrawerToggle={handleDrawerToggle} />
-            <MainContent
-              handleDrawerToggle={handleDrawerToggle}
-              mobileOpen={mobileOpen}
-            />
-          </BrowserRouter>
-        </ThemeProvider>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider theme={theme}>
+            <BrowserRouter>
+              <CssBaseline />
+              <Header handleDrawerToggle={handleDrawerToggle} />
+              <MainContent
+                handleDrawerToggle={handleDrawerToggle}
+                mobileOpen={mobileOpen}
+              />
+            </BrowserRouter>
+          </ThemeProvider>
+        </QueryClientProvider>
       </Provider>
     </div>
   );
