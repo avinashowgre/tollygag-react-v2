@@ -14,9 +14,6 @@ const useStyles = makeStyles(() => {
     collapsibleElem: {
       padding: 5,
     },
-    listItemRoot: {
-      border: "1px solid black",
-    },
     root: {
       border: "1px solid black",
       borderRadius: 5,
@@ -46,7 +43,7 @@ export function Collapsible(props: Props) {
 
   return (
     <div className={classes.root}>
-      <ListItem button className={classes.listItemRoot} onClick={handleClick}>
+      <ListItem button onClick={handleClick}>
         {open ? <ExpandLess /> : <ExpandMore />}
 
         <Typography>{title}</Typography>

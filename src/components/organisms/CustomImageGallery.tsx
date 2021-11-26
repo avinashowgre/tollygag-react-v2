@@ -25,7 +25,6 @@ const useStyles = makeStyles((theme: Theme) =>
       maxHeight: 490,
     },
     imageItem: {
-      border: "1px solid black",
       transition: "0.3s",
       "&:hover": {
         boxShadow:
