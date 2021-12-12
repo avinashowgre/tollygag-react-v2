@@ -1,133 +1,49 @@
+// To access .env file variables
 require("dotenv").config();
-const express = require("express");
-const path = require("path");
-const cookieParser = require("cookie-parser");
-const cors = require("cors");
-const { verify } = require("jsonwebtoken");
-const { compare, hash } = require("bcryptjs");
-const { fakeDB } = require("../config/fakeDB");
-const {
-  createAccessToken,
-  createRefreshToken,
-  sendAccessToken,
-  sendRefreshToken,
-} = require("../config/tokens");
-const { isAuth } = require("../config/isAuth");
-const post = require("../config/routes/posts");
 
+const express = require("express");
+const cors = require("cors");
+const path = require("path");
 const app = express();
 
-// Needed to be able to read body data
-app.use(express.json()); // to support JSON encoded bodies
-app.use(express.urlencoded({ extended: true })); // support url encoded bodies
+const mainRoutes = require("../config/routes/main");
+const posts = require("../config/routes/posts");
 
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
+const connectDB = require("../config/db/connect");
 
+const notFound = require("../config/middleware/not-found");
+
+const errorHandlerMiddleware = require("../config/middleware/error-handler");
+
+// Enable cors security headers
+app.use(cors());
+
+// middleware
+app.use(express.json());
 app.use(express.static(path.resolve(__dirname, "../build")));
 
-app.use("/post", post);
+app.use("/api/v1/auth", mainRoutes);
+app.use("/api/v1/posts", posts);
 
-app.post("/api/signup", async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const user = fakeDB.find((user) => user.email === email);
-    if (user) {
-      throw new Error("User Already Exists");
-    }
-    const hashedPassword = await hash(password, 10);
-    fakeDB.push({ id: fakeDB.length, email, password: hashedPassword });
-    res.send({ message: "User created" });
-  } catch (err) {
-    res.send({ error: `${err.message}` });
-  }
-});
-
-app.post("/api/signin", async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const user = fakeDB.find((user) => user.email === email);
-    if (!user) {
-      throw new Error("User does not exist");
-    }
-    // compare crypted password and see if it checks out
-    const valid = await compare(password, user.password);
-    if (!valid) {
-      throw new Error("Incorrect password");
-    }
-    const accesstoken = createAccessToken(user.id);
-    const refreshtoken = createRefreshToken(user.id);
-
-    user.refreshtoken = refreshtoken;
-
-    sendRefreshToken(res, refreshtoken);
-    sendAccessToken(res, req, accesstoken);
-  } catch (err) {
-    res.send({ error: `${err.message}` });
-  }
-});
-
-app.post("/api/signout", (_req, res) => {
-  res.clearCookie("refreshtoken", { path: "/refresh_token" });
-  // Logic here for also remove refreshtoken from db
-  return res.send({
-    message: "Logged out",
-  });
-});
-
-app.post("/api/protected", async (req, res) => {
-  try {
-    const userId = isAuth(req);
-    if (userId !== null) {
-      res.send({
-        data: "This is protected data.",
-      });
-    }
-  } catch (err) {
-    res.send({
-      error: `${err.message}`,
-    });
-  }
-});
-
-app.post("/api/refresh_token", (req, res) => {
-  const token = req.cookies.refreshtoken;
-  // If we don't have a token in our request
-  if (!token) return res.send({ accesstoken: "" });
-  // We have a token, let's verify it!
-  let payload = null;
-  try {
-    payload = verify(token, process.env.REFRESH_TOKEN_SECRET);
-  } catch (err) {
-    return res.send({ accesstoken: "" });
-  }
-  // token is valid, check if user exist
-  const user = fakeDB.find((user) => user.id === payload.userId);
-  if (!user) return res.send({ accesstoken: "" });
-  // user exist, check if refreshtoken exist on user
-  if (user.refreshtoken !== token) return res.send({ accesstoken: "" });
-  // token exist, create new Refresh- and accesstoken
-  const accesstoken = createAccessToken(user.id);
-  const refreshtoken = createRefreshToken(user.id);
-  // update refreshtoken on user in db
-  // Could have different versions instead!
-  user.refreshtoken = refreshtoken;
-  // All good to go, send new refreshtoken and accesstoken
-  sendRefreshToken(res, refreshtoken);
-  return res.send({ accesstoken });
-});
+app.use(notFound);
+app.use(errorHandlerMiddleware);
 
 app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../build", "index.html"));
 });
 
-// This displays message that the server running and listening to specified port
-app.listen(process.env.PORT || 8080, () =>
-  console.log(`Listening on port ${process.env.PORT || 8080}!`)
-);
+const port = 5000;
+
+const start = async () => {
+  try {
+    await connectDB(process.env.MONGO_DB_CONNECTION_STRING);
+    // This displays message that the server running and listening to specified port
+    app.listen(process.env.PORT || port, () =>
+      console.log(`Listening on port ${process.env.PORT || port}!`)
+    );
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+start();
