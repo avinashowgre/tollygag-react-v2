@@ -15,7 +15,8 @@ const upload = multer({
     s3: s3,
     bucket: process.env.AWS_S3_BUCKET_NAME,
     key: function (req, file, cb) {
-      cb(null, file.originalname); //use Date.now() for unique file keys
+      const fullPath = `memes/${file.originalname}`;
+      cb(null, fullPath); //use Date.now() for unique file keys
     },
   }),
 });

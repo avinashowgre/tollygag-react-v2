@@ -14,7 +14,7 @@ const {
 
 router.get("/:id", getPost);
 router.get("/", getAllPosts);
-router.post("/", upload.single("file"), createPost);
+router.post("/", isUserAuthenticated, upload.single("file"), createPost);
 router.delete("/:id", isUserAuthenticated, deletePost);
 router.patch("/:id", isUserAuthenticated, updatePost);
 
