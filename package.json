@@ -48,10 +48,12 @@
   "scripts": {
     "start": "node src/server.js",
     "start:dev": "react-scripts start",
+    "start:server": "concurrently \"npm run server\" \"npm run watch\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "nodemon src/server.js"
+    "server": "nodemon src/server.js",
+    "watch": "npm-watch"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -75,11 +77,20 @@
     "@types/express": "^4.17.13",
     "@types/faker": "^5.1.2",
     "@types/jsonwebtoken": "^8.5.5",
-    "concurrently": "6.4.0",
+    "concurrently": "^6.4.0",
     "dummy-json": "^3.0.1",
     "faker": "^5.1.0",
     "msw": "^0.21.2",
     "nodemon": "^2.0.13",
+    "npm-watch": "^0.11.0",
     "ts-node": "^10.2.1"
+  },
+  "watch": {
+    "build": {
+      "patterns": [
+        "src"
+      ],
+      "extensions": "ts,tsx"
+    }
   }
 }

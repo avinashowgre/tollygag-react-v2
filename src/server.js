@@ -25,12 +25,12 @@ app.use(express.static(path.resolve(__dirname, "../build")));
 app.use("/api/v1/auth", mainRoutes);
 app.use("/api/v1/posts", posts);
 
-app.use(notFound);
-app.use(errorHandlerMiddleware);
-
 app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../build", "index.html"));
 });
+
+app.use(notFound);
+app.use(errorHandlerMiddleware);
 
 const port = 5000;
 
