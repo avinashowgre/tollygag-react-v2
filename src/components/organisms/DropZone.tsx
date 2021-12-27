@@ -1,8 +1,11 @@
+import React, { useCallback } from "react";
+
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
-import React, { useCallback } from "react";
-import { useDropzone } from "react-dropzone";
+
 import ClearIcon from "@material-ui/icons/Clear";
+
+import { useDropzone } from "react-dropzone";
 import { renderMedia } from "../../common/image.utils";
 
 type Props = {
@@ -41,6 +44,7 @@ export function DropZone(props: Props) {
     canvas.style.display = "none";
     overlayElem.style.display = "block";
     clearMemeBtn.style.display = "none";
+    setPost("");
   }
 
   function displayMeme(blob: Blob) {
@@ -59,25 +63,28 @@ export function DropZone(props: Props) {
     renderMedia(canvas, blob);
   }
 
-  const onDrop = useCallback((acceptedFiles) => {
-    const file = acceptedFiles[0];
-    const blob = new Blob(
-      [file],
-      { type: file.type } // If the type is unknown, default is empty string.
-    );
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      const file = acceptedFiles[0];
+      const blob = new Blob(
+        [file],
+        { type: file.type } // If the type is unknown, default is empty string.
+      );
 
-    // var fd = new FormData();
-    // fd.append("file", file);
+      // var fd = new FormData();
+      // fd.append("file", file);
 
-    // fetch("/upload", { method: "post", body: fd }).then((data) => {
-    //   console.log(data);
-    // });
+      // fetch("/upload", { method: "post", body: fd }).then((data) => {
+      //   console.log(data);
+      // });
 
-    clearMeme();
-    displayMeme(blob);
-    setPost(blob);
+      clearMeme();
+      displayMeme(blob);
+      setPost(file);
+    },
     // eslint-disable-next-line
-  }, []);
+    []
+  );
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 

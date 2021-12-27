@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 
 import { withRouter } from "react-router";
 
@@ -8,6 +8,7 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Tooltip from "@material-ui/core/Tooltip";
+import Typography from "@material-ui/core/Typography";
 
 import { Collapsible } from "../components/atoms/Collapsible";
 import { CustomImageGallery } from "../components/organisms/CustomImageGallery";
@@ -23,7 +24,7 @@ import { MemeTO } from "../api/api.types";
 
 function CreatePost() {
   const [imgUrl, setImgUrl] = useState<any>();
-  const [post, setPost] = useState<Blob>();
+  const [post, setPost] = useState<any>();
   const [memes, setMemes] = useState<MemeTO[]>([]);
   const [toastProps, setToastProps] = useState<
     Omit<ToastProps, "onCloseToast">
@@ -68,9 +69,13 @@ function CreatePost() {
 
   function createPost() {
     if (post) {
+      const url = URL.createObjectURL(post);
+      // setDialogContent(<img src={url} alt="post" />);
+      // setOpenDialog(true);
       var fd = new FormData();
       fd.append("file", post);
-      fetch("http://localhost:8080/post/create", {
+      fd.append("title", "Post");
+      fetch("/api/v1/posts", {
         method: "post",
         body: fd,
       }).then((data) => {
