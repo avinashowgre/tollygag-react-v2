@@ -1,3 +1,5 @@
+import { TextElem } from "../components/atoms/CanvasElem";
+
 function renderMedia(canvas: HTMLCanvasElement, blob: Blob) {
   const ctx = canvas.getContext("2d", {
     alpha: false,
@@ -17,4 +19,20 @@ function renderMedia(canvas: HTMLCanvasElement, blob: Blob) {
   }
 }
 
-export { renderMedia };
+function renderText(canvas: HTMLCanvasElement, textElem: TextElem) {
+  const ctx = canvas.getContext("2d", {
+    alpha: false,
+  }) as CanvasRenderingContext2D;
+
+  // Text attributes
+  ctx.font = "30pt Impact";
+  ctx.textAlign = "center";
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 3;
+  ctx.fillStyle = "white";
+
+  ctx.fillText(textElem.text, textElem.x, textElem.y);
+  ctx.strokeText(textElem.text, textElem.x, textElem.y);
+}
+
+export { renderMedia, renderText };
