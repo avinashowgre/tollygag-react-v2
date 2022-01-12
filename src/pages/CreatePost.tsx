@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import React, { useState } from "react";
 
 import { withRouter } from "react-router";
 
@@ -21,6 +21,7 @@ import {
 
 import { getMemes } from "../api/get-memes.api";
 import { MemeTO } from "../api/api.types";
+import { TextElem } from "../components/atoms/CanvasElem";
 
 function CreatePost() {
   const [imgUrl, setImgUrl] = useState<any>();
@@ -33,6 +34,8 @@ function CreatePost() {
     open: false,
     toastMessage: "",
   });
+  const [captionCount, setCaptionCount] = useState<number>(0);
+  const [captions, setCaptions] = useState<TextElem[] | undefined>();
 
   const classes = useStyles();
 
@@ -84,6 +87,10 @@ function CreatePost() {
     }
   }
 
+  function handleAddCaption() {
+    setCaptionCount((prevValue) => (prevValue += 1));
+  }
+
   return (
     <Grid container className={classes.createPostContainer} spacing={2}>
       <Grid item lg={6} md={6}>
@@ -102,7 +109,7 @@ function CreatePost() {
           </Grid>
           <Separator text={"( OR )"} />
           <Grid container direction="column" className={classes.postArea}>
-            <MemeLayout img={imgUrl} setPost={setPost} />
+            <MemeLayout img={imgUrl} setPost={setPost} textElems={captions} />
           </Grid>
         </Grid>
       </Grid>
@@ -113,20 +120,20 @@ function CreatePost() {
           </Collapsible>
         </Grid>
         <Grid alignItems={"center"} container spacing={2}>
-          <Grid item>
-            <Tooltip title="Feature work in progress">
-              <span>
+          {imgUrl && (
+            <Grid item>
+              <Tooltip title="Feature work in progress">
                 <Button
                   color={"primary"}
-                  disabled
                   fullWidth
+                  onClick={handleAddCaption}
                   variant={"contained"}
                 >
                   Add caption
                 </Button>
-              </span>
-            </Tooltip>
-          </Grid>
+              </Tooltip>
+            </Grid>
+          )}
           <Grid item>
             <Button
               color={"primary"}
@@ -137,6 +144,28 @@ function CreatePost() {
               Create post
             </Button>
           </Grid>
+        </Grid>
+        <Grid container direction={"column"}>
+          {Array(captionCount)
+            .fill(1)
+            .map((value, index) => (
+              <TextField
+                InputProps={{
+                  startAdornment: (
+                    <Typography component="span">{index + 1}.</Typography>
+                  ),
+                }}
+                onBlur={(e) => {
+                  let captionsCopy = captions ? [...captions] : [];
+                  captionsCopy.push({
+                    text: e.target.value,
+                    x: 250,
+                    y: 40 * (index + 1),
+                  });
+                  setCaptions(captionsCopy);
+                }}
+              />
+            ))}
         </Grid>
       </Grid>
       <ToastNotification {...toastProps} onCloseToast={handleClose} />

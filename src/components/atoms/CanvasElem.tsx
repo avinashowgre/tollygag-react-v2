@@ -5,55 +5,73 @@ import { makeStyles } from "@material-ui/core/styles";
 import { renderMedia, renderText } from "../../common/image.utils";
 
 export type TextElem = {
-  height: number;
+  height?: number;
   text: string;
-  width: number;
+  width?: number;
   x: number;
   y: number;
 };
-
-// export type RenderElem = TextElem | ReactNode;
 
 type Props = {
   "data-testid": string;
   isVisible: boolean;
   image: Blob;
-  updateTextElems: (params: TextElem[]) => void;
-  textElems: TextElem[];
+  updateTextElems?: (params: TextElem[]) => void;
+  textElems?: TextElem[];
 };
 
-// Check the custom type of a variable
-// function isTextElem(elem: any): elem is TextElem {
-//   return (elem as TextElem) !== undefined;
-// }
-
 export function CanvasElem(props: Props) {
-  const { "data-testid": testid, image, updateTextElems, textElems } = props;
+  const {
+    "data-testid": testid,
+    image,
+    updateTextElems,
+    textElems = [],
+  } = props;
   const classes = useStyles(props);
   const [selectedTextIndex, setSelectedTextIndex] = useState<number>(-1);
-  const [textList, setTextList] = useState<TextElem[]>(textElems);
 
   useEffect(() => {
+    draw(image, testid, textElems);
+  }, [image, testid, textElems]);
+
+  function draw(image: Blob, testid: string, textElems: TextElem[]) {
     const canvas = document.querySelector(`#${testid}`) as HTMLCanvasElement;
     const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 
-    renderMedia(canvas, image);
+    // renderMedia(canvas, image);
 
-    for (var i = 0; i < textList.length; i++) {
-      var text = textList[i];
-      text.width = ctx.measureText(text.text).width;
-      text.height = 16;
-    }
+    const img = new Image();
+    img.onload = (event: any) => {
+      // URL.revokeObjectURL(event.target.src); // Once it loaded the resource, then you can free it at the beginning.
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-    textList.forEach((elem) => {
-      renderText(canvas, elem);
+    textElems.forEach((elem) => {
+      elem.width = ctx.measureText(elem.text).width;
+      elem.height = 16;
+
+        console.log("getting triggered");
+
+        // renderText(canvas, elem);
+
+        // Text attributes
+        ctx.font = "30pt Impact";
+        ctx.textAlign = "center";
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 3;
+        ctx.fillStyle = "white";
+
+        ctx.fillText(elem.text, elem.x, elem.y);
+        ctx.strokeText(elem.text, elem.x, elem.y);
     });
-  }, [image, testid, textList]);
+    };
+    img.src = URL.createObjectURL(image);
+  }
 
   function textHittest(x: number, y: number, textIndex: number) {
-    var text = textList[textIndex];
+    var text = textElems[textIndex];
     return (
-      x >= text.x &&
+      text.width &&
+      text.height &&
       x <= text.x + text.width &&
       y >= text.y - text.height &&
       y <= text.y
@@ -72,21 +90,59 @@ export function CanvasElem(props: Props) {
     const startX = e.clientX - offsetX;
     const startY = e.clientY - offsetY;
 
-    console.log(startX, startY);
-
     // Put your mousedown stuff here
-    for (var i = 0; i < textList.length; i++) {
-      if (textHittest(startX, startY, i)) {
+    for (var i = 0; i < textElems.length; i++) {
+      const isTextHit = textHittest(startX, startY, i);
+      if (isTextHit) {
         setSelectedTextIndex(i);
       }
     }
   }
 
-  function handleMouseMove(e: MouseEvent<HTMLCanvasElement>) {}
+  function handleMouseMove(e: MouseEvent<HTMLCanvasElement>) {
+    e.preventDefault();
 
-  function handleMouseUp(e: MouseEvent<HTMLCanvasElement>) {}
+    if (selectedTextIndex < 0) {
+      return;
+    }
 
-  function handleMouseOut(e: MouseEvent<HTMLCanvasElement>) {}
+    const canvas = document.querySelector(`#${testid}`) as Element;
+    const canvasOffset = canvas.getBoundingClientRect();
+
+    const offsetX = canvasOffset.left;
+    const offsetY = canvasOffset.top;
+
+    const mouseX = e.clientX - offsetX;
+    const mouseY = e.clientY - offsetY;
+
+    const startX = e.clientX - offsetX;
+    const startY = e.clientY - offsetY;
+
+    // Put your mousemove stuff here
+    var dx = mouseX - startX;
+    var dy = mouseY - startY;
+
+    textElems.forEach((text, index) => {
+      if (index === selectedTextIndex) {
+        text.x += dx;
+        text.y += dy;
+      }
+    });
+
+    draw(image, testid, textElems);
+
+    // if (updateTextElems) updateTextElems(texts);
+  }
+
+  function handleMouseUp(e: MouseEvent<HTMLCanvasElement>) {
+    e.preventDefault();
+    setSelectedTextIndex(-1);
+  }
+
+  function handleMouseOut(e: MouseEvent<HTMLCanvasElement>) {
+    e.preventDefault();
+    setSelectedTextIndex(-1);
+  }
 
   return (
     <canvas
@@ -103,7 +159,7 @@ export function CanvasElem(props: Props) {
 }
 
 const useStyles = makeStyles(() => {
-  const isCanvasVisible = (props: Props) => {
+  const canvasVisible = (props: Props) => {
     if (props["isVisible"]) {
       return "block";
     }
@@ -112,7 +168,7 @@ const useStyles = makeStyles(() => {
 
   return {
     canvasElem: {
-      display: (props: Props) => isCanvasVisible(props),
+      display: (props: Props) => canvasVisible(props),
       height: "100%",
       objectFit: "fill",
       position: "relative",
