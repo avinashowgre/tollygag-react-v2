@@ -8,6 +8,7 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Tooltip from "@material-ui/core/Tooltip";
+import Typography from "@material-ui/core/Typography";
 
 import { Collapsible } from "../components/atoms/Collapsible";
 import { CustomImageGallery } from "../components/organisms/CustomImageGallery";
@@ -20,10 +21,11 @@ import {
 
 import { getMemes } from "../api/get-memes.api";
 import { MemeTO } from "../api/api.types";
+import { TextElem } from "../components/atoms/CanvasElem";
 
 function CreatePost() {
   const [imgUrl, setImgUrl] = useState<any>();
-  const [post, setPost] = useState<Blob>();
+  const [post, setPost] = useState<any>();
   const [memes, setMemes] = useState<MemeTO[]>([]);
   const [toastProps, setToastProps] = useState<
     Omit<ToastProps, "onCloseToast">
@@ -32,6 +34,8 @@ function CreatePost() {
     open: false,
     toastMessage: "",
   });
+  const [captionCount, setCaptionCount] = useState<number>(0);
+  const [captions, setCaptions] = useState<TextElem[] | undefined>();
 
   const classes = useStyles();
 
@@ -68,15 +72,23 @@ function CreatePost() {
 
   function createPost() {
     if (post) {
+      const url = URL.createObjectURL(post);
+      // setDialogContent(<img src={url} alt="post" />);
+      // setOpenDialog(true);
       var fd = new FormData();
       fd.append("file", post);
-      fetch("http://localhost:8080/post/create", {
+      fd.append("title", "Post");
+      fetch("/api/v1/posts", {
         method: "post",
         body: fd,
       }).then((data) => {
         console.log(data);
       });
     }
+  }
+
+  function handleAddCaption() {
+    setCaptionCount((prevValue) => (prevValue += 1));
   }
 
   return (
@@ -97,7 +109,7 @@ function CreatePost() {
           </Grid>
           <Separator text={"( OR )"} />
           <Grid container direction="column" className={classes.postArea}>
-            <MemeLayout img={imgUrl} setPost={setPost} />
+            <MemeLayout img={imgUrl} setPost={setPost} textElems={captions} />
           </Grid>
         </Grid>
       </Grid>
@@ -108,20 +120,20 @@ function CreatePost() {
           </Collapsible>
         </Grid>
         <Grid alignItems={"center"} container spacing={2}>
-          <Grid item>
-            <Tooltip title="Feature work in progress">
-              <span>
+          {imgUrl && (
+            <Grid item>
+              <Tooltip title="Feature work in progress">
                 <Button
                   color={"primary"}
-                  disabled
                   fullWidth
+                  onClick={handleAddCaption}
                   variant={"contained"}
                 >
                   Add caption
                 </Button>
-              </span>
-            </Tooltip>
-          </Grid>
+              </Tooltip>
+            </Grid>
+          )}
           <Grid item>
             <Button
               color={"primary"}
@@ -132,6 +144,28 @@ function CreatePost() {
               Create post
             </Button>
           </Grid>
+        </Grid>
+        <Grid container direction={"column"}>
+          {Array(captionCount)
+            .fill(1)
+            .map((value, index) => (
+              <TextField
+                InputProps={{
+                  startAdornment: (
+                    <Typography component="span">{index + 1}.</Typography>
+                  ),
+                }}
+                onBlur={(e) => {
+                  let captionsCopy = captions ? [...captions] : [];
+                  captionsCopy.push({
+                    text: e.target.value,
+                    x: 250,
+                    y: 40 * (index + 1),
+                  });
+                  setCaptions(captionsCopy);
+                }}
+              />
+            ))}
         </Grid>
       </Grid>
       <ToastNotification {...toastProps} onCloseToast={handleClose} />

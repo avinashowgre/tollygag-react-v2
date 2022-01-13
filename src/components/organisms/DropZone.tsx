@@ -1,18 +1,25 @@
+import React, { useCallback, useEffect, useState } from "react";
+
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
-import React, { useCallback } from "react";
-import { useDropzone } from "react-dropzone";
+
 import ClearIcon from "@material-ui/icons/Clear";
+
+import { useDropzone } from "react-dropzone";
 import { renderMedia } from "../../common/image.utils";
+import { CanvasElem, TextElem } from "../atoms/CanvasElem";
 
 type Props = {
   img?: Blob;
   orderIndex: string;
   setPost: (img: any) => void;
+  textElems?: TextElem[];
 };
 
 export function DropZone(props: Props) {
-  const { img, orderIndex, setPost } = props;
+  const { img, orderIndex, setPost, textElems } = props;
+  const [imageBlob, setImageBlob] = useState<Blob | undefined>();
+  const [canvasVisible, setCanvasVisible] = useState<boolean>(false);
 
   const classes = useStyles();
 
@@ -20,9 +27,25 @@ export function DropZone(props: Props) {
   const overlayElemId = `overlay-elem-${orderIndex}`;
   const removeBtnId = `remove-${orderIndex}`;
 
-  if (img) {
-    displayMeme(img);
-  }
+  useEffect(() => {
+    if (img) {
+      const overlayElem = document.querySelector(
+        `#${overlayElemId}`
+      ) as HTMLDivElement;
+      const clearMemeBtn = document.querySelector(
+        `#${removeBtnId}`
+      ) as HTMLButtonElement;
+
+      overlayElem.style.display = "none";
+      clearMemeBtn.style.display = "block";
+      setImageBlob(img);
+      setCanvasVisible(true);
+    }
+  }, [img, overlayElemId, removeBtnId]);
+
+  // if (img) {
+  //   displayMeme(img);
+  // }
 
   function clearMeme() {
     const canvas = document.querySelector(`#${canvasId}`) as HTMLCanvasElement;
@@ -41,6 +64,9 @@ export function DropZone(props: Props) {
     canvas.style.display = "none";
     overlayElem.style.display = "block";
     clearMemeBtn.style.display = "none";
+    setCanvasVisible(false);
+    setImageBlob(undefined);
+    setPost("");
   }
 
   function displayMeme(blob: Blob) {
@@ -59,25 +85,28 @@ export function DropZone(props: Props) {
     renderMedia(canvas, blob);
   }
 
-  const onDrop = useCallback((acceptedFiles) => {
-    const file = acceptedFiles[0];
-    const blob = new Blob(
-      [file],
-      { type: file.type } // If the type is unknown, default is empty string.
-    );
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      const file = acceptedFiles[0];
+      const blob = new Blob(
+        [file],
+        { type: file.type } // If the type is unknown, default is empty string.
+      );
 
-    // var fd = new FormData();
-    // fd.append("file", file);
+      // var fd = new FormData();
+      // fd.append("file", file);
 
-    // fetch("/upload", { method: "post", body: fd }).then((data) => {
-    //   console.log(data);
-    // });
+      // fetch("/upload", { method: "post", body: fd }).then((data) => {
+      //   console.log(data);
+      // });
 
-    clearMeme();
-    displayMeme(blob);
-    setPost(blob);
+      clearMeme();
+      displayMeme(blob);
+      setPost(file);
+    },
     // eslint-disable-next-line
-  }, []);
+    []
+  );
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
@@ -99,12 +128,20 @@ export function DropZone(props: Props) {
         <input {...getInputProps()} />
         <p>Drag 'n' drop some files here, or click to select files</p>
       </div>
-      <canvas
+      {imageBlob && (
+        <CanvasElem
+          data-testid={canvasId}
+          image={imageBlob}
+          isVisible={canvasVisible}
+          textElems={textElems}
+        />
+      )}
+      {/* <canvas
         className={classes.canvasElem}
         id={`${canvasId}`}
         width="500"
         height="500"
-      ></canvas>
+      ></canvas> */}
     </div>
   );
 }
