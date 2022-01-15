@@ -14,12 +14,11 @@ type Props = {
   clearMeme: () => void;
   orderIndex: string;
   setPost: (img: any) => void;
-  textElems?: TextElem[];
+  texts: string[];
 };
 
 export function DropZone(props: Props) {
-  const { clearMeme, img, orderIndex, setPost, textElems } = props;
-  const [imageBlob, setImageBlob] = useState<Blob | undefined>();
+  const { clearMeme, img, orderIndex, setPost, texts = [] } = props;
   const [canvasVisible, setCanvasVisible] = useState<boolean>(false);
 
   const classes = useStyles();
@@ -39,14 +38,12 @@ export function DropZone(props: Props) {
 
       overlayElem.style.display = "none";
       clearMemeBtn.style.display = "block";
-      setImageBlob(img);
       setCanvasVisible(true);
     }
   }, [img, overlayElemId, removeBtnId]);
 
   function handleClearMeme() {
     clearMeme();
-    setImageBlob(undefined);
     setCanvasVisible(false);
   }
 
@@ -108,12 +105,12 @@ export function DropZone(props: Props) {
         <input {...getInputProps()} />
         <p>Drag 'n' drop some files here, or click to select files</p>
       </div>
-      {imageBlob && (
+      {img && (
         <CanvasElem
           data-testid={canvasId}
-          image={imageBlob}
+          image={img}
           isVisible={canvasVisible}
-          textElems={textElems}
+          texts={texts}
         />
       )}
     </div>
