@@ -91,6 +91,10 @@ function CreatePost() {
     setCaptionCount((prevValue) => (prevValue += 1));
   }
 
+  function clearMeme() {
+    setImgUrl(undefined);
+  }
+
   return (
     <Grid container className={classes.createPostContainer} spacing={2}>
       <Grid item lg={6} md={6}>
@@ -109,7 +113,12 @@ function CreatePost() {
           </Grid>
           <Separator text={"( OR )"} />
           <Grid container direction="column" className={classes.postArea}>
-            <MemeLayout img={imgUrl} setPost={setPost} textElems={captions} />
+            <MemeLayout
+              img={imgUrl}
+              clearMeme={clearMeme}
+              setPost={setPost}
+              textElems={captions}
+            />
           </Grid>
         </Grid>
       </Grid>

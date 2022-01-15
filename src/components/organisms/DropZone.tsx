@@ -11,13 +11,14 @@ import { CanvasElem, TextElem } from "../atoms/CanvasElem";
 
 type Props = {
   img?: Blob;
+  clearMeme: () => void;
   orderIndex: string;
   setPost: (img: any) => void;
   textElems?: TextElem[];
 };
 
 export function DropZone(props: Props) {
-  const { img, orderIndex, setPost, textElems } = props;
+  const { clearMeme, img, orderIndex, setPost, textElems } = props;
   const [imageBlob, setImageBlob] = useState<Blob | undefined>();
   const [canvasVisible, setCanvasVisible] = useState<boolean>(false);
 
@@ -43,30 +44,10 @@ export function DropZone(props: Props) {
     }
   }, [img, overlayElemId, removeBtnId]);
 
-  // if (img) {
-  //   displayMeme(img);
-  // }
-
-  function clearMeme() {
-    const canvas = document.querySelector(`#${canvasId}`) as HTMLCanvasElement;
-    const overlayElem = document.querySelector(
-      `#${overlayElemId}`
-    ) as HTMLDivElement;
-    const clearMemeBtn = document.querySelector(
-      `#${removeBtnId}`
-    ) as HTMLButtonElement;
-
-    var ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.restore();
-
-    canvas.style.display = "none";
-    overlayElem.style.display = "block";
-    clearMemeBtn.style.display = "none";
-    setCanvasVisible(false);
+  function handleClearMeme() {
+    clearMeme();
     setImageBlob(undefined);
-    setPost("");
+    setCanvasVisible(false);
   }
 
   function displayMeme(blob: Blob) {
@@ -100,7 +81,6 @@ export function DropZone(props: Props) {
       //   console.log(data);
       // });
 
-      clearMeme();
       displayMeme(blob);
       setPost(file);
     },
@@ -116,7 +96,7 @@ export function DropZone(props: Props) {
         aria-label="delete"
         id={`${removeBtnId}`}
         className={classes.closeButton}
-        onClick={clearMeme}
+        onClick={handleClearMeme}
       >
         <ClearIcon fontSize="small" />
       </IconButton>
@@ -136,12 +116,6 @@ export function DropZone(props: Props) {
           textElems={textElems}
         />
       )}
-      {/* <canvas
-        className={classes.canvasElem}
-        id={`${canvasId}`}
-        width="500"
-        height="500"
-      ></canvas> */}
     </div>
   );
 }
@@ -160,13 +134,6 @@ const useStyles = makeStyles(() => {
       "&:hover": {
         background: "white",
       },
-    },
-    canvasElem: {
-      display: "none",
-      height: "100%",
-      objectFit: "fill",
-      position: "relative",
-      width: "100%",
     },
     overlayElem: {
       top: 0,

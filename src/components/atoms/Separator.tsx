@@ -1,7 +1,9 @@
 import { makeStyles } from "@material-ui/core";
-import React from "react";
+import React, { ReactNode } from "react";
 
-type Props = any;
+type Props = {
+  text: ReactNode;
+};
 
 export function Separator(props: Props) {
   const { text } = props;
