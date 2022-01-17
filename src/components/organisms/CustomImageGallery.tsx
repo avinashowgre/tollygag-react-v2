@@ -5,54 +5,69 @@ import ImageList from "@material-ui/core/ImageList";
 import ImageListItem from "@material-ui/core/ImageListItem";
 
 type ItemData = {
-  id: string;
-  name: string;
-  url: string;
+    id: string;
+    name: string;
+    url: string;
 };
 
 type Props = {
-  itemData: ItemData[];
+    itemData: ItemData[];
+    onImageClick?: (param: string) => void;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: "flex",
-      flexWrap: "wrap",
-      justifyContent: "space-around",
-      overflow: "auto",
-      backgroundColor: theme.palette.background.paper,
-      maxHeight: 490,
-    },
-    imageItem: {
-      border: "1px solid black",
-      transition: "0.3s",
-      "&:hover": {
-        boxShadow:
-          "0 4px 10px 0 rgb(0 0 0 / 20%), 0 4px 20px 0 rgb(0 0 0 / 19%)",
-        cursor: "pointer",
-      },
-    },
-    imageList: {
-      width: "100%",
-      height: "100%",
-    },
-  })
+    createStyles({
+        root: {
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "space-around",
+            overflow: "auto",
+            backgroundColor: theme.palette.background.paper,
+            maxHeight: 490,
+        },
+        imageItem: {
+            border: "1px solid black",
+            transition: "0.3s",
+            "&:hover": {
+                boxShadow:
+                    "0 4px 10px 0 rgb(0 0 0 / 20%), 0 4px 20px 0 rgb(0 0 0 / 19%)",
+                cursor: "pointer",
+            },
+        },
+        imageList: {
+            width: "100%",
+            height: "100%",
+        },
+    })
 );
 
 export function CustomImageGallery(props: Props) {
-  const classes = useStyles();
-  const { itemData } = props;
+    const classes = useStyles();
+    const { itemData, onImageClick } = props;
 
-  return (
-    <div className={classes.root}>
-      <ImageList rowHeight={160} className={classes.imageList} cols={4}>
-        {itemData.map((item) => (
-          <ImageListItem key={item.id} cols={1} className={classes.imageItem}>
-            <img src={item.url} alt={item.name} />
-          </ImageListItem>
-        ))}
-      </ImageList>
-    </div>
-  );
+    function handleOnClick(e: any) {
+        if (onImageClick) {
+            onImageClick(e.target.src);
+        }
+    }
+
+    return (
+        <div className={classes.root}>
+            <ImageList rowHeight={160} className={classes.imageList} cols={4}>
+                {itemData.map((item) => (
+                    <ImageListItem
+                        key={item.id}
+                        cols={1}
+                        className={classes.imageItem}
+                    >
+                        <img
+                            src={item.url}
+                            alt={item.name}
+                            onClick={handleOnClick}
+                        />
+                    </ImageListItem>
+                ))}
+            </ImageList>
+        </div>
+    );
 }

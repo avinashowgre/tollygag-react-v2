@@ -15,7 +15,7 @@ export type TextElem = {
 type Props = {
     "data-testid": string;
     isVisible: boolean;
-    image: Blob;
+    image: string | File;
     updateTextElems?: (params: TextElem[]) => void;
     texts: string[];
 };
@@ -25,19 +25,16 @@ export function CanvasElem(props: Props) {
 
     const classes = useStyles(props);
 
-    // eslint-disable-next-line
-    const [imageBlob, setImageBlob] = useState<Blob>(image);
     const [selectedTextIndex, setSelectedTextIndex] = useState<number>(-1);
     const [textElems, setTextElems] = useState<TextElem[]>([]);
 
     let offsetX: number, offsetY: number, startX: number, startY: number;
 
-    useEffect(() => {
-        const canvas = document.querySelector(
-            `#${testid}`
-        ) as HTMLCanvasElement;
-        const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+    const imageObj = new Image();
+    imageObj.src =
+        typeof image === "string" ? image : URL.createObjectURL(image);
 
+    useEffect(() => {
         const elems: TextElem[] = texts.map((text, index) => {
             return {
                 height: 100,
@@ -52,7 +49,11 @@ export function CanvasElem(props: Props) {
 
         draw();
 
+        const canvas = document.querySelector(
+            `#${testid}`
+        ) as HTMLCanvasElement;
         const rect = canvas.getBoundingClientRect();
+
         const canvasOffset = {
             top: rect.top + window.scrollY,
             left: rect.left + window.scrollX,
@@ -63,9 +64,7 @@ export function CanvasElem(props: Props) {
 
         // eslint-disable-next-line
         offsetY = canvasOffset.top;
-
-        // eslint-disable-next-line
-    }, [texts]);
+    }, [image, texts]);
 
     function draw() {
         const canvas = document.querySelector(
@@ -73,11 +72,10 @@ export function CanvasElem(props: Props) {
         ) as HTMLCanvasElement;
         const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 
-        const img = new Image();
-        img.onload = (event: any) => {
-            console.log(img);
-            // URL.revokeObjectURL(event.target.src); // Once it loaded the resource, then you can free it at the beginning.
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        imageObj.onload = () => {
+            ctx.drawImage(imageObj, 0, 0, canvas.width, canvas.height);
 
             textElems.forEach((elem) => {
                 // Text attributes
@@ -99,7 +97,8 @@ export function CanvasElem(props: Props) {
                 );
             });
         };
-        img.src = URL.createObjectURL(imageBlob);
+
+        return;
     }
 
     function textHittest(x: number, y: number, textIndex: number) {

@@ -107,7 +107,7 @@ function CreatePost() {
                             size={"small"}
                             variant="outlined"
                             onChange={(evt) => {
-                                fetchImageFromUrl(evt.target.value);
+                                setImgUrl(evt.target.value);
                             }}
                         />
                     </Grid>
@@ -132,7 +132,10 @@ function CreatePost() {
                         title={"Use Custom Memes"}
                         onClick={getImgFlipTemplates}
                     >
-                        <CustomImageGallery itemData={memes} />
+                        <CustomImageGallery
+                            itemData={memes}
+                            onImageClick={setImgUrl}
+                        />
                     </Collapsible>
                 </Grid>
                 <Grid alignItems={"center"} container spacing={2}>
