@@ -1,8 +1,14 @@
-import React, { MouseEvent, useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
 
-import canvasTxt from "canvas-txt";
+import { Stage, Layer, Text, Image } from "react-konva";
+import useImage from "use-image";
 
-import { makeStyles } from "@material-ui/core/styles";
+type Props = {
+    "data-testid": string;
+    imageUrl: string;
+    isVisible: boolean;
+    texts: string[];
+};
 
 export type TextElem = {
     height: number;
@@ -12,191 +18,62 @@ export type TextElem = {
     y: number;
 };
 
-type Props = {
-    "data-testid": string;
-    isVisible: boolean;
-    image: string | File;
-    updateTextElems?: (params: TextElem[]) => void;
-    texts: string[];
-};
-
-export function CanvasElem(props: Props) {
-    const { "data-testid": testid, image, texts = [] } = props;
-
-    const classes = useStyles(props);
-
-    const [selectedTextIndex, setSelectedTextIndex] = useState<number>(-1);
+function CanvasElem(props: Props, ref: any) {
+    const { "data-testid": testid, texts = [""], imageUrl, isVisible } = props;
     const [textElems, setTextElems] = useState<TextElem[]>([]);
-
-    let offsetX: number, offsetY: number, startX: number, startY: number;
-
-    const imageObj = new Image();
-    imageObj.src =
-        typeof image === "string" ? image : URL.createObjectURL(image);
+    const [image] = useImage(imageUrl, "anonymous");
 
     useEffect(() => {
         const elems: TextElem[] = texts.map((text, index) => {
             return {
                 height: 100,
                 text,
-                width: 200,
+                width: 100,
                 x: 250,
-                y: index * 20 + 100,
+                y: index * 100 + 100,
             };
         });
 
         setTextElems(elems);
+    }, [texts]);
 
-        draw();
+    function handleDragEnd(e: any, index: number) {
+        const captions = [...textElems];
 
-        const canvas = document.querySelector(
-            `#${testid}`
-        ) as HTMLCanvasElement;
-        const rect = canvas.getBoundingClientRect();
+        captions[index].x = e.target.x();
+        captions[index].y = e.target.y();
 
-        const canvasOffset = {
-            top: rect.top + window.scrollY,
-            left: rect.left + window.scrollX,
-        };
-
-        // eslint-disable-next-line
-        offsetX = canvasOffset.left;
-
-        // eslint-disable-next-line
-        offsetY = canvasOffset.top;
-    }, [image, texts]);
-
-    function draw() {
-        const canvas = document.querySelector(
-            `#${testid}`
-        ) as HTMLCanvasElement;
-        const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        imageObj.onload = () => {
-            ctx.drawImage(imageObj, 0, 0, canvas.width, canvas.height);
-
-            textElems.forEach((elem) => {
-                // Text attributes
-                ctx.textAlign = "center";
-                ctx.strokeStyle = "black";
-                ctx.lineWidth = 3;
-                ctx.fillStyle = "white";
-
-                canvasTxt.fontSize = 24;
-                canvasTxt.font = "Impact";
-
-                canvasTxt.drawText(
-                    ctx,
-                    elem.text,
-                    elem.x,
-                    elem.y,
-                    elem.width,
-                    elem.height
-                );
-            });
-        };
-
-        return;
-    }
-
-    function textHittest(x: number, y: number, textIndex: number) {
-        var text = textElems[textIndex];
-        return (
-            text.width &&
-            text.height &&
-            x >= text.x &&
-            x <= text.x + text.width &&
-            y >= text.y - text.height &&
-            y <= text.y
-        );
-    }
-
-    function handleMouseDown(e: MouseEvent<HTMLCanvasElement>) {
-        e.preventDefault();
-
-        startX = e.pageX - offsetX;
-        startY = e.pageY - offsetY;
-
-        // Put your mousedown stuff here
-        for (var i = 0; i < textElems.length; i++) {
-            const isTextHit = textHittest(startX, startY, i);
-            if (isTextHit) {
-                setSelectedTextIndex(i);
-            }
-        }
-    }
-
-    function handleMouseMove(e: MouseEvent<HTMLCanvasElement>) {
-        e.preventDefault();
-
-        if (selectedTextIndex < 0) {
-            return;
-        }
-
-        let mouseX = e.pageX - offsetX;
-        let mouseY = e.pageY - offsetY;
-
-        // Put your mousemove stuff here
-        let dx = mouseX - startX;
-        let dy = mouseY - startY;
-
-        startX = mouseX;
-        startY = mouseY;
-
-        const updatedTextElems = textElems.map((text, index) => {
-            if (index === selectedTextIndex) {
-                text.x += dx;
-                text.y += dy;
-            }
-            return text;
-        });
-
-        setTextElems(updatedTextElems);
-
-        draw();
-    }
-
-    function handleMouseUp(e: MouseEvent<HTMLCanvasElement>) {
-        e.preventDefault();
-        setSelectedTextIndex(-1);
-    }
-
-    function handleMouseOut(e: MouseEvent<HTMLCanvasElement>) {
-        e.preventDefault();
-        setSelectedTextIndex(-1);
+        setTextElems(captions);
     }
 
     return (
-        <canvas
-            className={classes.canvasElem}
-            id={testid}
-            onMouseDown={handleMouseDown}
-            onMouseOut={handleMouseOut}
-            onMouseUp={handleMouseUp}
-            onMouseMove={handleMouseMove}
-            width="500"
-            height="500"
-        ></canvas>
+        <Stage
+            data-testid={testid}
+            ref={ref}
+            visible={isVisible}
+            height={486}
+            width={526}
+        >
+            <Layer>
+                <Image height={486} image={image} width={526} />
+                {textElems.map((elem: TextElem, index: number) => (
+                    <Text
+                        text={elem.text}
+                        x={elem.x}
+                        y={elem.y}
+                        fontSize={30}
+                        draggable
+                        fill={"white"}
+                        stroke={"black"}
+                        fontFamily={"Impact"}
+                        width={elem.width}
+                        onDragEnd={(e) => handleDragEnd(e, index)}
+                        key={index}
+                    />
+                ))}
+            </Layer>
+        </Stage>
     );
 }
 
-const useStyles = makeStyles(() => {
-    const canvasVisible = (props: Props) => {
-        if (props["isVisible"]) {
-            return "block";
-        }
-        return "none";
-    };
-
-    return {
-        canvasElem: {
-            display: (props: Props) => canvasVisible(props),
-            height: "100%",
-            objectFit: "fill",
-            position: "relative",
-            width: "100%",
-        },
-    };
-});
+export default forwardRef(CanvasElem);
